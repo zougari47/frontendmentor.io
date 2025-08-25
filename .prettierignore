@@ -1,4 +1,23 @@
-# Ignore artifacts:
-build
-coverage
+# Node modules
 node_modules
+challenges/**/node_modules
+
+# Build output
+challenges/**/.next
+challenges/**/out
+challenges/**/build
+challenges/**/dist
+
+# Env files
+challenges/**/.env
+challenges/**/.env.local
+challenges/**/.env.development.local
+challenges/**/.env.test.local
+challenges/**/.env.production.local
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
