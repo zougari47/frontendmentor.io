@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-sans);
+
+  /* Colors */
+  --color-goku: red;
+  --color-neutral-0: hsl(0 0% 100%);
+  --color-neutral-200: hsl(216 5% 81%);
+  --color-neutral-300: hsl(240 20% 65%);
+  --color-neutral-600: hsl(240 17% 41%);
+  --color-neutral-900: hsl(240 40% 22%);
+  --color-blue-100: hsl(226 72% 93%);
+  --color-blue-200: hsl(225 75% 87%);
+  --color-blue-600: hsl(228 67% 57%);
+  --color-blue-700: hsl(228 67% 50%);
+  --color-red-700: hsl(355 100% 45%);
+  --color-red-300: hsl(1 100% 80%);
+  --color-indigo-200: hsl(245 100% 85%);
+  --color-blue-300: hsl(207 100% 77%);
+  --color-green-300: hsl(115 68% 70%);
+  --color-amber-300: hsl(35 100% 74%);
+
+  /* Spacing */
+  --spacing-0: 0px;
+  --spacing-025: 2px;
+  --spacing-050: 4px;
+  --spacing-075: 6px;
+  --spacing-100: 8px;
+  --spacing-125: 10px;
+  --spacing-150: 12px;
+  --spacing-200: 16px;
+  --spacing-250: 20px;
+  --spacing-300: 24px;
+  --spacing-400: 32px;
+  --spacing-500: 40px;
+  --spacing-600: 48px;
+  --spacing-800: 64px;
+  --spacing-1000: 80px;
+
+  /* Radius */
+  --radius-0: 0px;
+  --radius-4: 4px;
+  --radius-6: 6px;
+  --radius-8: 8px;
+  --radius-10: 10px;
+  --radius-12: 12px;
+  --radius-16: 16px;
+  --radius-20: 20px;
+  --radius-24: 24px;
+  --radius-full: 999px;
+}
+
+@layer utilities {
+  .bg-gradient {
+    background: linear-gradient(180deg, #f5f5ff 73%, #e0e0ff 100%);
+  }
+  .txt-preset-1 {
+    @apply text-[52px] font-bold leading-[140%] tracking-[-2px];
+  }
+
+  .txt-preset-1-mobile {
+    @apply text-[46px] font-bold leading-[120%] tracking-[-2px];
+  }
+
+  .txt-preset-2 {
+    @apply text-[40px] font-bold leading-[120%] tracking-[-0.3px];
+  }
+
+  .txt-preset-2-mobile {
+    @apply text-[32px] font-bold leading-[120%] tracking-[-0.3px];
+  }
+
+  .txt-preset-3 {
+    @apply text-[32px] font-bold leading-[140%] tracking-[-0.3px];
+  }
+
+  .txt-preset-3-mobile {
+    @apply text-[28px] font-bold leading-[130%] tracking-[-0.3px];
+  }
+
+  .txt-preset-4 {
+    @apply text-[24px] leading-[140%];
+  }
+
+  .txt-preset-4-regular {
+    @apply text-[24px] font-normal leading-[140%];
+  }
+
+  .txt-preset-5 {
+    @apply text-[20px] font-semibold leading-[140%];
+  }
+
+  .txt-preset-6 {
+    @apply text-[18px] font-medium leading-[120%];
+  }
+
+  .txt-preset-6-italic {
+    @apply text-[18px] font-medium italic leading-[130%];
+  }
+
+  .txt-preset-6-regular {
+    @apply text-[18px] font-normal leading-[140%] tracking-[-0.3px];
+  }
+
+  .txt-preset-7 {
+    @apply text-[15px] font-normal leading-[140%] tracking-[-0.3px];
+  }
+
+  .txt-preset-8 {
+    @apply text-[13px] leading-[100%];
+  }
+
+  .txt-preset-9 {
+    @apply text-[12px] font-normal leading-[110%];
+  }
+}
