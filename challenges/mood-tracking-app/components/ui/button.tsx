@@ -10,7 +10,7 @@ const buttonVariants = cva("block cursor-pointer", {
         "rounded-10 txt-preset-5 text-neutral-0 px-400 py-150 bg-blue-600",
         "hover:bg-blue:700",
         "focus:outline-2 focus:outline-offset-2 focus:outline-blue-600",
-        "cursor-not-allowed disabled:bg-blue-200"
+        "disabled:cursor-not-allowed disabled:bg-blue-200"
       ),
       secondary: cn(
         "rounded-8 px-200 py-100 bg-neutral-0 txt-preset-6 border border-neutral-300 text-neutral-900 shadow-[0px_1px_2px_0px_rgba(10,13,20,0.03)]",
