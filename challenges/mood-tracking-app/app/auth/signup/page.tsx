@@ -48,15 +48,15 @@ export default function SignUpPage() {
       password: "@Aa12345",
     },
   })
+  const { isSubmitting } = form.formState
 
-  // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    // console.log(values)
-    //
     try {
-      const result = await signup(values)
+      const formData = new FormData()
+      formData.append("email", values.email)
+      formData.append("password", values.password)
+
+      const result = await signup(formData)
       console.log(result)
     } catch (err) {
       console.error(err)
@@ -84,6 +84,7 @@ export default function SignUpPage() {
                   <Input
                     className="mb-075"
                     placeholder="example@mail.com"
+                    disabled={isSubmitting}
                     {...field}
                   />
                 </FormControl>
@@ -101,7 +102,7 @@ export default function SignUpPage() {
                   Password
                 </FormLabel>
                 <FormControl>
-                  <Input type="password" {...field} />
+                  <Input type="password" disabled={isSubmitting} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -109,7 +110,9 @@ export default function SignUpPage() {
           />
 
           <div className="space-y-250">
-            <Button className="w-full">Sign Up</Button>
+            <Button disabled={isSubmitting} className="w-full">
+              Sign Up
+            </Button>
             <p className="text-center">
               Already got an account?{" "}
               <Link className="text-blue-600" href="/auth/login">

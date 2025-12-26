@@ -64,5 +64,28 @@ export async function updateSession(request: NextRequest) {
   // If this is not done, you may be causing the browser and server to go out
   // of sync and terminate the user's session prematurely!
 
+  if (user && request.nextUrl.pathname.startsWith("/dashboard")) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("onboarded")
+      .eq("id", user.id)
+      .single()
+
+    console.log("verify is onboard", { profile })
+
+    if (profile?.onboarded === false) {
+      const url = request.nextUrl.clone()
+      url.pathname = "/onboarding"
+
+      const response = NextResponse.redirect(url)
+
+      supabaseResponse.cookies.getAll().forEach((cookie) => {
+        response.cookies.set(cookie.name, cookie.value, cookie)
+      })
+
+      return response
+    }
+  }
+
   return supabaseResponse
 }

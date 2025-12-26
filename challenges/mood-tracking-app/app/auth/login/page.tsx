@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -27,6 +28,7 @@ const formSchema = z.object({
 })
 
 export default function SignUpPage() {
+  const [flash, setFlash] = useState<null | string>(null)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: "onChange",
@@ -36,14 +38,24 @@ export default function SignUpPage() {
     },
   })
 
-  // 2. Define a submit handler.
+  useEffect(() => {
+    const match = document.cookie.match(/(^| )flash=([^;]+)/)
+
+    if (match) {
+      const message = decodeURIComponent(match[2])
+      setFlash(message)
+
+      document.cookie = "flash=; Max-Age=0; path=/;"
+    }
+  }, [])
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    // console.log(values)
-    //
     try {
-      const result = await login(values)
+      const formData = new FormData()
+      formData.append("email", values.email)
+      formData.append("password", values.password)
+
+      const result = await login(formData)
       console.log(result)
     } catch (err) {
       console.error(err)
@@ -55,6 +67,11 @@ export default function SignUpPage() {
       <div className="space-y-100">
         <h1 className="txt-preset-3 text-neutral-900">Welcome back!</h1>
         <p className="">Log in to continue tracking your mood and sleep</p>
+        {flash && (
+          <p className="text-preset-3 rounded bg-emerald-100 p-4 text-green-800">
+            {flash}
+          </p>
+        )}
       </div>
       <Form {...form}>
         <form
