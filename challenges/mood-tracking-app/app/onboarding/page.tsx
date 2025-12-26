@@ -16,17 +16,29 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 
-// import { completeOnboarding } from "../action"
+import { completeOnboarding } from "../actions/onboarding"
 
-const completeOnboarding = async () => {}
 const formSchema = z.object({
-  name: z.string().min(1, "Name is required").max(255),
-  avatar: z.instanceof(File).nullable().optional(),
+  name: z
+    .string()
+    .min(3, "Name is required, at least 3 characters")
+    .max(64, "Name must be at most 64 characters"),
+  avatar: z
+    .instanceof(File)
+    .nullable()
+    .optional()
+    .refine(
+      (file) => !file || file.size <= 250000,
+      "File size must be under 250KB"
+    )
+    .refine(
+      (file) => !file || ["image/png", "image/jpeg"].includes(file.type),
+      "Unsupported file type. Please upload a PNG or JPEG"
+    ),
 })
 
 export default function OnboardingPage() {
   const [preview, setPreview] = useState<string | ArrayBuffer | null>(null)
-  // const [avatar, setAvatar] = useState<File | null>(null)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -36,6 +48,7 @@ export default function OnboardingPage() {
       avatar: null,
     },
   })
+  const { isSubmitting } = form.formState
 
   const handleFileChange = (file: File | null) => {
     if (file) {
@@ -52,115 +65,121 @@ export default function OnboardingPage() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      // await completeOnboarding({ ...values, avatar })
+      const formData = new FormData()
+      formData.append("name", values.name)
+
+      if (values.avatar) {
+        formData.append("avatar", values.avatar)
+      }
+
+      await completeOnboarding(formData)
     } catch (err) {
       console.error(err)
     }
   }
 
   return (
-    <div className="bg-neutral-0 txt-preset-6-regular rounded-16 py-500 px-200 md:px-400 mx-auto w-[90%] max-w-[530px] text-neutral-600 shadow-[0_8px_16px_0_rgba(32,37,41,0.08)]">
-      <div className="space-y-100">
-        <h1 className="txt-preset-3 text-neutral-900">
-          Personalize your experience
-        </h1>
-        <p>Add your name and a profile picture to make Mood yours.</p>
-      </div>
+    <main className="pt-1000">
+      <img src="/logo.svg" alt="logo" className="mb-400 mx-auto block" />
+      <div className="bg-neutral-0 txt-preset-6-regular rounded-16 py-500 px-200 md:px-400 mx-auto w-[90%] max-w-[530px] text-neutral-600 shadow-[0_8px_16px_0_rgba(32,37,41,0.08)]">
+        <div className="space-y-100">
+          <h1 className="txt-preset-3 text-neutral-900">
+            Personalize your experience
+          </h1>
+          <p>Add your name and a profile picture to make Mood yours.</p>
+        </div>
 
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="my-400 space-y-250"
-        >
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem className="space-y-100">
-                <FormLabel className="block text-neutral-900">Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Jane Appleseed" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="my-400 space-y-250"
+          >
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem className="space-y-100">
+                  <FormLabel className="block text-neutral-900">Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Jane Appleseed"
+                      disabled={isSubmitting}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <div className="flex gap-5">
-            {preview ? (
-              <img
-                src={preview as string}
-                alt="Preview"
-                className="aspect-square h-16 w-16 rounded-full object-cover"
-              />
-            ) : (
-              <img
-                src="/placeholder.png"
-                alt="Your image"
-                className="aspect-square h-16 w-16 rounded-full"
-              />
-            )}
-            {/* <img */}
-            {/*   src="/placeholder.png" */}
-            {/*   alt="Your image" */}
-            {/*   className="block aspect-square h-16 w-16 rounded-full" */}
-            {/* /> */}
-            <div>
-              <span className="txt-preset-6-regular mb-1.5 block text-neutral-900">
-                Upload Image
-              </span>
-              <span className="txt-preset-7 mb-4 block text-neutral-600">
-                Max 250KB, PNG or JPEG
-              </span>
+            <div className="flex gap-5">
+              {preview ? (
+                <img
+                  src={preview as string}
+                  alt="Preview"
+                  className="aspect-square h-16 w-16 rounded-full object-cover"
+                />
+              ) : (
+                <img
+                  src="/placeholder.png"
+                  alt="Your image"
+                  className="aspect-square h-16 w-16 rounded-full"
+                />
+              )}
+              <div>
+                <span className="txt-preset-6-regular mb-1.5 block text-neutral-900">
+                  Upload Image
+                </span>
+                <span className="txt-preset-7 mb-4 block text-neutral-600">
+                  Max 250KB, PNG or JPEG
+                </span>
 
-              <FormField
-                control={form.control}
-                name="avatar"
-                render={({ field: { ref, onChange } }) => {
-                  const fileInputRef = useRef<HTMLInputElement>(null)
-                  const uploadBtnRef = useRef<HTMLButtonElement>(null)
-                  return (
-                    <>
-                      <Button
-                        ref={(e) => {
-                          ref(e)
-                          uploadBtnRef.current = e
-                        }}
-                        type="button"
-                        variant="secondary"
-                        className="block"
-                        onClick={() => fileInputRef.current?.click()}
-                      >
-                        Upload
-                      </Button>
-                      <input
-                        ref={(e) => {
-                          ref(e)
-                          fileInputRef.current = e
-                        }}
-                        type="file"
-                        hidden
-                        accept="image/png,image/jpeg"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0] || null
-                          onChange(file)
-                          handleFileChange(file)
-                        }}
-                      />
-                    </>
-                  )
-                }}
-              />
+                <FormField
+                  control={form.control}
+                  name="avatar"
+                  render={({ field: { ref, onChange } }) => {
+                    const fileInputRef = useRef<HTMLInputElement>(null)
+                    return (
+                      <FormItem>
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          className="block"
+                          disabled={isSubmitting}
+                          onClick={() => fileInputRef.current?.click()}
+                        >
+                          Upload
+                        </Button>
+                        <input
+                          ref={(e) => {
+                            ref(e)
+                            fileInputRef.current = e
+                          }}
+                          type="file"
+                          hidden
+                          accept="image/png,image/jpeg"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0] || null
+                            onChange(file)
+                            handleFileChange(file)
+                          }}
+                        />
+                        <FormMessage className="mt-100" />
+                      </FormItem>
+                    )
+                  }}
+                />
+              </div>
             </div>
-          </div>
 
-          <div className="space-y-250">
-            <Button type="submit" className="w-full">
-              Start Tracking
-            </Button>
-          </div>
-        </form>
-      </Form>
-    </div>
+            <div className="space-y-250">
+              <Button type="submit" className="w-full" disabled={isSubmitting}>
+                Start Tracking
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </div>
+    </main>
   )
 }
