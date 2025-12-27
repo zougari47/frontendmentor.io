@@ -18,25 +18,20 @@ import {
 import { Input } from "@/components/ui/input"
 
 import { login } from "../action"
-
-const formSchema = z.object({
-  email: z
-    .email({ message: "Invalid email address" })
-    .min(5, { message: "Email too short" })
-    .max(255, { message: "Email too long" }),
-  password: z.string(),
-})
+import { loginSchema } from "../schema"
 
 export default function SignUpPage() {
   const [flash, setFlash] = useState<null | string>(null)
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const [error, setError] = useState<null | string>(null)
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
     mode: "onChange",
     defaultValues: {
       email: "yt.4inform@gmail.com",
       password: "@Aa12345",
     },
   })
+  const { isSubmitting } = form.formState
 
   useEffect(() => {
     const match = document.cookie.match(/(^| )flash=([^;]+)/)
@@ -49,14 +44,11 @@ export default function SignUpPage() {
     }
   }, [])
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof loginSchema>) {
     try {
-      const formData = new FormData()
-      formData.append("email", values.email)
-      formData.append("password", values.password)
+      const { error } = await login(values)
 
-      const result = await login(formData)
-      console.log(result)
+      if (error) setError(error.message)
     } catch (err) {
       console.error(err)
     }
@@ -66,10 +58,15 @@ export default function SignUpPage() {
     <div className="bg-neutral-0 txt-preset-6-regular rounded-16 py-500 px-200 md:px-400 mx-auto w-[90%] max-w-[530px] text-neutral-600 shadow-[0_8px_16px_0_rgba(32,37,41,0.08)]">
       <div className="space-y-100">
         <h1 className="txt-preset-3 text-neutral-900">Welcome back!</h1>
-        <p className="">Log in to continue tracking your mood and sleep</p>
+        <p>Log in to continue tracking your mood and sleep</p>
         {flash && (
           <p className="text-preset-3 rounded bg-emerald-100 p-4 text-green-800">
             {flash}
+          </p>
+        )}
+        {error && (
+          <p className="text-preset-3 rounded bg-rose-100 p-4 text-red-800">
+            {error}
           </p>
         )}
       </div>
@@ -88,6 +85,7 @@ export default function SignUpPage() {
                   <Input
                     className="mb-075"
                     placeholder="example@mail.com"
+                    disabled={isSubmitting}
                     {...field}
                   />
                 </FormControl>
@@ -105,7 +103,7 @@ export default function SignUpPage() {
                   Password
                 </FormLabel>
                 <FormControl>
-                  <Input type="password" {...field} />
+                  <Input type="password" disabled={isSubmitting} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -113,7 +111,9 @@ export default function SignUpPage() {
           />
 
           <div className="space-y-250">
-            <Button className="w-full">Log In</Button>
+            <Button disabled={isSubmitting} className="w-full">
+              Log In
+            </Button>
             <p className="text-center">
               Haven't go an account{" "}
               <Link className="text-blue-600" href="/auth/signup">
