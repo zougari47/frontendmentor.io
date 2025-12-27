@@ -1,6 +1,7 @@
 "use client"
 
 import { useRef, useState } from "react"
+import { profileSchema } from "@/schemas/profile"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -18,32 +19,11 @@ import { Input } from "@/components/ui/input"
 
 import { completeOnboarding } from "../actions/onboarding"
 
-export const formSchema = z.object({
-  name: z
-    .string()
-    .min(3, "Name is required, at least 3 characters")
-    .max(64, "Name must be at most 64 characters"),
-  avatar: z
-    .union([z.instanceof(File), z.url()])
-    .nullable()
-    .optional()
-    .refine(
-      (val) => !(val instanceof File) || val.size <= 250_000,
-      "File size must be under 250KB"
-    )
-    .refine(
-      (val) =>
-        !(val instanceof File) ||
-        ["image/png", "image/jpeg"].includes(val.type),
-      "Unsupported file type. Please upload a PNG or JPEG"
-    ),
-})
-
 export default function OnboardingPage() {
   const [preview, setPreview] = useState<string | ArrayBuffer | null>(null)
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof profileSchema>>({
+    resolver: zodResolver(profileSchema),
     mode: "onChange",
     defaultValues: {
       name: "",

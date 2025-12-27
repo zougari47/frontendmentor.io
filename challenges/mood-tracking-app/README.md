@@ -1,5 +1,5 @@
 ## TODO
 
-- rename middleware to proxy
-- make onboarding page and updateProfile Dialog use the same schema from the same file
+- ~~rename middleware to proxy~~
+- ~~make onboarding page and updateProfile Dialog use the same schema from the same file~~
 - make redirect for login/signup page to /dashaboard when user is logged in

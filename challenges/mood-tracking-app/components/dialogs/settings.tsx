@@ -1,6 +1,7 @@
 "use client"
 
 import { useRef } from "react"
+import { profileSchema } from "@/schemas/profile"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import z from "zod"
@@ -24,7 +25,6 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { updateProfile } from "@/app/actions/update-profile"
-import { formSchema } from "@/app/onboarding/page"
 
 interface SettingsDialogProps {
   name: string
@@ -39,8 +39,8 @@ export function SettingsDialog({
   open,
   setOpen,
 }: SettingsDialogProps) {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof profileSchema>>({
+    resolver: zodResolver(profileSchema),
     mode: "onChange",
     defaultValues: {
       name: name,
