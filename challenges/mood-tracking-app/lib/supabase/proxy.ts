@@ -42,7 +42,6 @@ export async function updateSession(request: NextRequest) {
 
   if (
     !user &&
-    !request.nextUrl.pathname.startsWith("/login") &&
     !request.nextUrl.pathname.startsWith("/auth") &&
     !request.nextUrl.pathname.startsWith("/error")
   ) {
@@ -86,6 +85,23 @@ export async function updateSession(request: NextRequest) {
 
       return response
     }
+  }
+
+  // redirect logged-in users away from auth pages
+  const isAuthPage =
+    request.nextUrl.pathname.startsWith("/auth/signup") ||
+    request.nextUrl.pathname.startsWith("/auth/login")
+
+  if (user && isAuthPage) {
+    const url = request.nextUrl.clone()
+    url.pathname = "/dashboard"
+    const response = NextResponse.redirect(url)
+
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      response.cookies.set(cookie.name, cookie.value, cookie)
+    })
+
+    return response
   }
 
   return supabaseResponse
