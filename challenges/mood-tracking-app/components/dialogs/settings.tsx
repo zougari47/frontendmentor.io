@@ -1,11 +1,19 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useRef } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { z } from "zod"
+import z from "zod"
 
 import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import {
   Form,
   FormControl,
@@ -15,86 +23,70 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { updateProfile } from "@/app/actions/update-profile"
+import { formSchema } from "@/app/onboarding/page"
 
-import { completeOnboarding } from "../actions/onboarding"
+interface SettingsDialogProps {
+  name: string
+  open: boolean
+  avatarUrl: string | null
+  setOpen: (open: boolean) => void
+}
 
-export const formSchema = z.object({
-  name: z
-    .string()
-    .min(3, "Name is required, at least 3 characters")
-    .max(64, "Name must be at most 64 characters"),
-  avatar: z
-    .union([z.instanceof(File), z.url()])
-    .nullable()
-    .optional()
-    .refine(
-      (val) => !(val instanceof File) || val.size <= 250_000,
-      "File size must be under 250KB"
-    )
-    .refine(
-      (val) =>
-        !(val instanceof File) ||
-        ["image/png", "image/jpeg"].includes(val.type),
-      "Unsupported file type. Please upload a PNG or JPEG"
-    ),
-})
-
-export default function OnboardingPage() {
-  const [preview, setPreview] = useState<string | ArrayBuffer | null>(null)
-
+export function SettingsDialog({
+  name,
+  avatarUrl,
+  open,
+  setOpen,
+}: SettingsDialogProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: "onChange",
     defaultValues: {
-      name: "",
-      avatar: null,
+      name: name,
+      avatar: avatarUrl,
     },
   })
   const { isSubmitting } = form.formState
+  const syncAvatar = form.watch("avatar")
 
-  const handleFileChange = (file: File | null) => {
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = () => setPreview(reader.result)
-      reader.readAsDataURL(file)
-      form.setValue("avatar", file)
-      form.clearErrors("avatar")
-    } else {
-      setPreview(null)
-      form.setValue("avatar", null)
+  function getAvatarPreview(): string {
+    switch (true) {
+      case !!syncAvatar &&
+        typeof syncAvatar !== "string" &&
+        ["image/png", "image/jpeg"].includes(syncAvatar.type):
+        return URL.createObjectURL(syncAvatar)
+      case !!avatarUrl:
+        return avatarUrl
+      default:
+        return "/placeholder.png"
     }
   }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const formData = new FormData()
-      formData.append("name", values.name)
+      const { error } = await updateProfile(values)
 
-      if (values.avatar) {
-        formData.append("avatar", values.avatar)
-      }
-
-      await completeOnboarding(formData)
+      if (!error) setOpen(false)
     } catch (err) {
       console.error(err)
     }
   }
 
   return (
-    <main className="pt-1000">
-      <img src="/logo.svg" alt="logo" className="mb-400 mx-auto block" />
-      <div className="bg-neutral-0 txt-preset-6-regular rounded-16 py-500 px-200 md:px-400 mx-auto w-[90%] max-w-[530px] text-neutral-600 shadow-[0_8px_16px_0_rgba(32,37,41,0.08)]">
-        <div className="space-y-100">
-          <h1 className="txt-preset-3 text-neutral-900">
-            Personalize your experience
-          </h1>
-          <p>Add your name and a profile picture to make Mood yours.</p>
-        </div>
-
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent onPointerDownOutside={(e) => e.preventDefault()}>
+        <DialogHeader>
+          <DialogTitle>Update your profile</DialogTitle>
+          <DialogDescription>
+            Personalize your account with your name and photo.
+          </DialogDescription>
+        </DialogHeader>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
             className="my-400 space-y-250"
+            id="update-profile"
           >
             <FormField
               control={form.control}
@@ -115,19 +107,11 @@ export default function OnboardingPage() {
             />
 
             <div className="flex gap-5">
-              {preview ? (
-                <img
-                  src={preview as string}
-                  alt="Preview"
-                  className="aspect-square h-16 w-16 rounded-full object-cover"
-                />
-              ) : (
-                <img
-                  src="/placeholder.png"
-                  alt="Your image"
-                  className="aspect-square h-16 w-16 rounded-full"
-                />
-              )}
+              <img
+                src={getAvatarPreview()}
+                alt="Your image"
+                className="aspect-square h-16 w-16 rounded-full object-cover"
+              />
               <div>
                 <span className="txt-preset-6-regular mb-1.5 block text-neutral-900">
                   Upload Image
@@ -163,7 +147,6 @@ export default function OnboardingPage() {
                           onChange={(e) => {
                             const file = e.target.files?.[0] || null
                             onChange(file)
-                            handleFileChange(file)
                           }}
                         />
                         <FormMessage className="mt-100" />
@@ -173,15 +156,19 @@ export default function OnboardingPage() {
                 />
               </div>
             </div>
-
-            <div className="space-y-250">
-              <Button type="submit" className="w-full" disabled={isSubmitting}>
-                Start Tracking
-              </Button>
-            </div>
           </form>
         </Form>
-      </div>
-    </main>
+        <DialogFooter className="space-y-250">
+          <Button
+            form="update-profile"
+            type="submit"
+            className="w-full"
+            disabled={isSubmitting}
+          >
+            Save changes
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }

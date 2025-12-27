@@ -99,3 +99,26 @@
 @utility txt-preset-9 {
   @apply text-[12px] font-normal leading-[110%];
 }
+
+/* CSS to replace the dropdown menu by radix in mobile view  */
+@media (max-width: 768px) {
+  div[data-radix-popper-content-wrapper] {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    transform: none !important;
+
+    width: 100vw !important;
+    height: 100vh !important;
+    padding-top: 88px;
+
+    pointer-events: none !important;
+  }
+
+  div[data-radix-popper-content-wrapper] [data-slot="dropdown-menu-content"] {
+    pointer-events: auto !important;
+    width: calc(100vw - 16px) !important;
+    margin-inline: auto;
+    max-width: none !important;
+  }
+}

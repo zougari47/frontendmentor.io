@@ -1,5 +1,3 @@
-import { ClientOnly } from "@/components/client-only"
-
 export default function AuthLayout({
   children,
 }: {
@@ -8,7 +6,7 @@ export default function AuthLayout({
   return (
     <main className="pt-1000">
       <img src="/logo.svg" alt="logo" className="mb-400 mx-auto block" />
-      <ClientOnly>{children}</ClientOnly>
+      {children}
     </main>
   )
 }
