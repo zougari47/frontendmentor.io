@@ -45,7 +45,7 @@ export default function OnboardingPage() {
     }
   }
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof profileSchema>) {
     try {
       const formData = new FormData()
       formData.append("name", values.name)

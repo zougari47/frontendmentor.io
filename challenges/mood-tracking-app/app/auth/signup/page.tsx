@@ -26,8 +26,8 @@ export default function SignUpPage() {
     resolver: zodResolver(signupSchema),
     mode: "onChange",
     defaultValues: {
-      email: "yt.4inform@gmail.com",
-      password: "@Aa12345",
+      email: "",
+      password: "",
     },
   })
   const { isSubmitting } = form.formState

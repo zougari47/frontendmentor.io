@@ -1,5 +1,7 @@
 ## TODO
 
+- instead of repeat `z.infer<typeof moodSchema>` exoport it as type with each schema
+- update onboarding action and page user object instead of FormData
 - ~~handle error when credentials incorrect /login /singup~~
 - ~~rename middleware to proxy~~
 - ~~make onboarding page and updateProfile Dialog use the same schema from the same file~~

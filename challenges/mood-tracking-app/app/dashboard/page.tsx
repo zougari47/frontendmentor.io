@@ -1,4 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
+import { MoodDialog } from "@/components/dialogs/mood"
+import { Greeting } from "@/components/gretting"
 import { Header } from "@/components/header"
 
 export default async function DashboardPage() {
@@ -30,6 +32,9 @@ export default async function DashboardPage() {
         email={dashboardData.email!}
         avatarUrl={dashboardData.avatar_url}
       />
+
+      <Greeting name={dashboardData.name!} />
+      <MoodDialog />
     </div>
   )
 }

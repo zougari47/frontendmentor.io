@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache"
 import { profileSchema } from "@/schemas/profile"
-import z from "zod"
+import { z } from "zod"
 
 import { createClient } from "@/lib/supabase/server"
 
