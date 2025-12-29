@@ -1,10 +1,9 @@
 import type { Metadata } from "next"
-import { Geist, Reddit_Sans } from "next/font/google"
+import { Reddit_Sans } from "next/font/google"
 
 import "./globals.css"
 
-// NOTE: THE REDDIT SANS WAS NOT SHOWING LIKE THE DESING (BROKEN)
-const redditSans = Geist({
+const redditSans = Reddit_Sans({
   variable: "--font-sans",
   subsets: ["latin"],
 })

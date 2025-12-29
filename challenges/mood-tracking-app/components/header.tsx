@@ -16,11 +16,11 @@ interface HeaderProps {
 }
 
 export function Header({ email, name, avatarUrl }: HeaderProps) {
-  const [open, setOpen] = useState(false) // dialog
+  const [open, setOpen] = useState(false) // state for setting dialog
   const router = useRouter()
 
   return (
-    <header className="mt-400 flex items-center justify-between">
+    <header className="pt-400 flex items-center justify-between">
       <img src="/logo.svg" className="h-auto w-[177px]" />
       <DropdownMenu.Root>
         <DropdownMenu.Trigger className="gap-125 flex cursor-pointer items-center">
