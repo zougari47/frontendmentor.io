@@ -22,7 +22,6 @@ export const emotions = [
   "Optimistic",
   "Restless",
 ] as const
-// export type EmotionsEnum = (typeof emotions)[number]
 
 export const sleepHours = [1.0, 3.5, 5.5, 7.5, 10.0] as const
 
@@ -38,12 +37,16 @@ export const moodSchema = z.object({
 
   dayDescription: z
     .string("Please describe your day before continuing.")
+    .max(150, "150 Characters is the max length.")
     .refine(
       (val) => val.trim().split(/\s+/).length >= 5,
       "Please write a few words about your day before continuing."
     ),
 
-  sleepHours: z.number().refine((val) => sleepHours.includes(val as any), {
-    message: "Please select a valid sleep hour option",
-  }),
+  sleepHours: z
+    .number({ message: "Please select a valid sleep hour option" })
+    .refine((val) => sleepHours.includes(val as any), {
+      message: "Please select a valid sleep hour option",
+    }),
 })
+export type Mood = z.infer<typeof moodSchema>

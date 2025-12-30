@@ -1,72 +1,70 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useEffect, useState } from "react"
+import { XIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
 
-import { stepTitles, TOTAL_STEPS } from "./constants"
-import { ChildHandle, MoodForm } from "./form"
+import { stepTitles } from "./constants"
+import { MoodForm } from "./form"
 import ProgressBar from "./progress-bar"
 
 export function MoodDialog() {
   const [open, setOpen] = useState(false)
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1)
-  const moodFormRef = useRef<ChildHandle>(null)
 
-  async function handleContinue() {
-    const isValid = await moodFormRef.current?.validateForm(step)
-
-    if (isValid) {
-      setStep((prev) => Math.min(prev + 1, TOTAL_STEPS) as 1 | 2 | 3 | 4)
-    }
-  }
-
-  function handleOpenChange(newOpen: boolean) {
-    setOpen(newOpen)
-    if (!newOpen) {
-      setStep(1)
-    }
-  }
+  useEffect(() => {
+    if (!open) setStep(1)
+  }, [open])
 
   return (
-    <div>
-      <Dialog open={open} onOpenChange={handleOpenChange}>
-        <DialogTrigger asChild>
-          <Button className="mx-auto block">Log today's mood</Button>
-        </DialogTrigger>
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen) => {
+        console.log(isOpen ? "opened" : "closed")
+        setOpen(isOpen)
+      }}
+    >
+      <Button onClick={() => setOpen(true)} className="mx-auto block">
+        Log today's mood
+      </Button>
 
-        <DialogContent onPointerDownOutside={(e) => e.preventDefault()}>
-          <DialogHeader className="gap-300 flex flex-col text-left">
-            <DialogTitle className="mb-0">
-              {stepTitles[step - 1].tiltle}
-            </DialogTitle>
-            <ProgressBar step={step} />
-            <p className="txt-preset-3-mobile text-neutral-900">
-              {stepTitles[step - 1].subTitle}
-            </p>
-          </DialogHeader>
+      <DialogContent
+        className="bg-gradient"
+        showCloseButton={false}
+        onPointerDownOutside={(e) => e.preventDefault()}
+      >
+        <DialogHeader className="gap-300 flex flex-col text-left">
+          <DialogTitle className="mb-0">
+            {stepTitles[step - 1].tiltle}
+          </DialogTitle>
+          <ProgressBar step={step} />
+          <p className="txt-preset-3-mobile text-neutral-900">
+            {stepTitles[step - 1].subTitle}
+          </p>
+        </DialogHeader>
 
-          <MoodForm ref={moodFormRef} step={step} />
+        <MoodForm
+          step={step}
+          setStep={setStep}
+          closeModal={() => setOpen(false)}
+        />
 
-          <DialogFooter>
-            {step === TOTAL_STEPS ? (
-              <Button type="submit" form="mood-form">
-                Submit
-              </Button>
-            ) : (
-              <Button onClick={handleContinue}>Continue</Button>
-            )}
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </div>
+        <button
+          onClick={() => setOpen(false)}
+          data-slot="dialog-close"
+          className="absolute right-4 top-4 text-neutral-300 disabled:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0"
+        >
+          <XIcon />
+          <span className="sr-only">Close</span>
+        </button>
+      </DialogContent>
+    </Dialog>
   )
 }
