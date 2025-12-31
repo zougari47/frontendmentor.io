@@ -3,7 +3,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed": "tsx --env-file=.env.local ./supabase/seed.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -36,6 +37,7 @@
     "eslint-config-next": "16.1.1",
     "supabase": "^2.70.5",
     "tailwindcss": "^4.1.18",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }

@@ -1,5 +1,6 @@
 ## TODO
 
+- check in back if there is already mood in the same date before insert
 - instead of repeat `z.infer<typeof moodSchema>` exoport it as type with each schema
 - update onboarding action and page user object instead of FormData
 - ~~handle error when credentials incorrect /login /singup~~
