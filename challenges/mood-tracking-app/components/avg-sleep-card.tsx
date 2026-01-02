@@ -1,9 +1,16 @@
 import { ArrowDownRight, ArrowRight, ArrowUpRight } from "lucide-react"
 
-import { MoodBgColors, MoodIconsMono, moodLabels } from "@/lib/constants"
+import {
+  MoodBgColors,
+  MoodIconsMono,
+  moodLabels,
+  sleepRangeBounds,
+  sleepRanges,
+} from "@/lib/constants"
 import { cn } from "@/lib/utils"
 
 import { PatternSVG } from "./icons/pattern"
+import { SleepIcon } from "./icons/sleep"
 
 interface SleepCardProps {
   lastAvg: number | null
@@ -11,8 +18,15 @@ interface SleepCardProps {
 }
 
 export function AvgSleepCard({ lastAvg, prevAvg }: SleepCardProps) {
-  const title = lastAvg === null ? "Not enough data yet!" : moodLabels[lastAvg]
-  const Icon = lastAvg === null ? null : MoodIconsMono[lastAvg]
+  const title =
+    lastAvg === null
+      ? "Not enough data yet!"
+      : sleepRanges[
+          sleepRangeBounds.findIndex(
+            ([min, max]) => lastAvg >= min && lastAvg <= max
+          )
+        ]
+  const Icon = lastAvg === null ? null : SleepIcon
 
   const getTrend = () => {
     if (lastAvg === null || prevAvg === null) return null
@@ -43,22 +57,34 @@ export function AvgSleepCard({ lastAvg, prevAvg }: SleepCardProps) {
       <div
         className={cn(
           "rounded-20 px-200 py-250 space-y-150 relative z-50",
-          lastAvg ? MoodBgColors[lastAvg] : "bg-blue-100"
+          lastAvg ? "bg-blue-600" : "bg-blue-100"
         )}
       >
         <PatternSVG className="absolute right-0 top-0 h-full w-auto" />
         <h3 className="gap-150 [&_svg]:w-300 [&_svg]:h-300 flex items-center">
           {Icon && <Icon />}
-          <span className="txt-preset-4 text-neutral-900">{title}</span>
+          <span
+            className={cn(
+              "txt-preset-4",
+              lastAvg ? "text-neutral-0" : "text-neutral-900"
+            )}
+          >
+            {title} Hours
+          </span>
         </h3>
-        <p className="gap-150 flex items-center">
+        <p
+          className={cn(
+            "gap-150 flex items-center",
+            lastAvg ? "text-neutral-0" : "text-neutral-900"
+          )}
+        >
           {trend == "up" && <ArrowUpRight size={24} />}
           {trend == "same" && <ArrowRight size={24} />}
           {trend == "down" && <ArrowDownRight size={24} />}
-          <span className="txt-preset-7 text-neutral-900">
+          <span className="txt-preset-7">
             {trend
               ? `${trendLabel} the previous 5 check-ins`
-              : "Log 5 check-ins to see your average mood."}
+              : "Track 5 nights to view average sleep."}
           </span>
         </p>
       </div>

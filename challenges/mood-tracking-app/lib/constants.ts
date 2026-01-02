@@ -36,16 +36,14 @@ export const emotions = [
 ] as const
 
 export const sleepHours = [1.0, 3.5, 5.5, 7.5, 10.0] as const
-
-export const moodLabels = [
-  "Very Sad",
-  "Sad",
-  "Neutral",
-  "Happy",
-  "Very Happy",
-] as const
-
 export const sleepRanges = ["0-2", "3-4", "5-6", "7-8", "+9"] as const
+export const sleepRangeBounds = [
+  [0, 2],
+  [3, 4],
+  [5, 6],
+  [7, 8],
+  [9, 10],
+] as const
 
 export const TOTAL_STEPS = 4 as const
 export const stepTitles = [
@@ -90,3 +88,11 @@ export const MoodBgColors = [
   "bg-green-300",
   "bg-amber-300",
 ]
+
+export const moodLabels = [
+  "Very Sad",
+  "Sad",
+  "Neutral",
+  "Happy",
+  "Very Happy",
+] as const

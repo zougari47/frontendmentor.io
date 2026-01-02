@@ -4,6 +4,7 @@ import { MS_PER_DAY } from "@/lib/constants"
 import { getAvg } from "@/lib/utils"
 
 import { AvgMoodCard } from "./avg-mood-card"
+import { AvgSleepCard } from "./avg-sleep-card"
 
 type Mood = Tables<"moods">
 
@@ -12,7 +13,6 @@ interface StatisticsProps {
 }
 
 export function Statistics({ moods }: StatisticsProps) {
-  // calc
   const now = new Date()
   const todayStart = new Date(
     now.getFullYear(),
@@ -60,6 +60,7 @@ export function Statistics({ moods }: StatisticsProps) {
     >
       <div className="rounded-16 space-y-300 px-200 py-250 border border-blue-100 bg-neutral-100">
         <AvgMoodCard lastAvg={last5DaysMoodAvg} prevAvg={prev5DaysMoodAvg} />
+        <AvgSleepCard lastAvg={last5DaysSleepAvg} prevAvg={prev5DaysSleepAvg} />
       </div>
     </section>
   )
