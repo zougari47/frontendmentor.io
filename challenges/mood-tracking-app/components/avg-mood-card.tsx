@@ -1,9 +1,8 @@
 import { ArrowDownRight, ArrowRight, ArrowUpRight } from "lucide-react"
 
-import { cn, MoodBgColors, MoodIconsColor, MoodIconsMono } from "@/lib/utils"
+import { MoodBgColors, MoodIconsMono, moodLabels } from "@/lib/constants"
+import { cn } from "@/lib/utils"
 
-// import { AvgCard } from "./avg-card"
-import { moodLabels } from "./dialogs/mood/constants"
 import { PatternSVG } from "./icons/pattern"
 
 interface MoodCardProps {
@@ -11,7 +10,7 @@ interface MoodCardProps {
   prevAvg: number | null
 }
 
-export function MoodCard({ lastAvg, prevAvg }: MoodCardProps) {
+export function AvgMoodCard({ lastAvg, prevAvg }: MoodCardProps) {
   const title = lastAvg === null ? "Keep tracking!" : moodLabels[lastAvg]
   const Icon = lastAvg === null ? null : MoodIconsMono[lastAvg]
 
@@ -66,11 +65,3 @@ export function MoodCard({ lastAvg, prevAvg }: MoodCardProps) {
     </div>
   )
 }
-
-// {trend() === "up" && "Increase from"}
-// {trend() === "down" && "Decrease from"}
-// {trend() === "same" && "Same as"}
-//
-// {trend()
-//   ? "The previous check-ins"
-//   : "Track 5 nights to view average sleep."}

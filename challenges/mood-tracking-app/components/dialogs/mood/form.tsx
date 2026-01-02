@@ -1,10 +1,18 @@
 "use client"
 
-import { emotions, Mood, moodSchema, sleepHours } from "@/schemas/mood"
+import { Mood, moodSchema } from "@/schemas/mood"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
-import { cn, MoodIconsColor } from "@/lib/utils"
+import {
+  emotions,
+  MoodIconsColor,
+  moodLabels,
+  sleepHours,
+  sleepRanges,
+  TOTAL_STEPS,
+} from "@/lib/constants"
+import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -18,7 +26,6 @@ import { RadioGroup } from "@/components/ui/radio-group"
 import { Textarea } from "@/components/ui/textarea"
 import { insertMood } from "@/app/actions/mood"
 
-import { moodLabels, sleepRanges, TOTAL_STEPS } from "./constants"
 import { RadioButton } from "./mood-radio-btn"
 
 interface MoodFormProps {

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { XIcon } from "lucide-react"
 
+import { stepTitles } from "@/lib/constants"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -11,7 +12,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 
-import { stepTitles } from "./constants"
 import { MoodForm } from "./form"
 import ProgressBar from "./progress-bar"
 

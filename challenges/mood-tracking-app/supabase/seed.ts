@@ -1,5 +1,6 @@
-import { emotions, sleepHours } from "@/schemas/mood"
 import { createClient } from "@supabase/supabase-js"
+
+import { emotions, sleepHours } from "@/lib/constants"
 
 import { Database } from "./types"
 

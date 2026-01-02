@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import { Mood } from "@/schemas/mood"
 
+import { FORTNIGHT_IN_MS } from "@/lib/constants"
 import { createClient } from "@/lib/supabase/server"
 import { MoodDialog } from "@/components/dialogs/mood"
 import { Greeting } from "@/components/gretting"
@@ -10,7 +11,6 @@ import { Statistics } from "@/components/statistics"
 // import { Statistics } from "@/components/statistics"
 
 export default async function DashboardPage() {
-  const FORTNIGHT_IN_MS = 14 * 24 * 60 * 60 * 1000
   const supabase = await createClient()
 
   const {

@@ -63,7 +63,7 @@ export function SettingsDialog({
     }
   }
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof profileSchema>) {
     try {
       const { error } = await updateProfile(values)
 
