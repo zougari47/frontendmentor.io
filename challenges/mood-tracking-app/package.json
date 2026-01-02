@@ -4,7 +4,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "seed": "tsx --env-file=.env.local ./supabase/seed.ts"
+    "seed": "tsx --env-file=.env.local ./supabase/seed.ts",
+    "gen-types": "supabase gen types typescript --linked > ./supabase/types.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

@@ -31,6 +31,7 @@ async function main() {
       await supabase.auth.admin.createUser({
         email: EMAIL,
         password: "password123",
+        email_confirm: true,
       })
 
     if (authError) {
@@ -38,7 +39,7 @@ async function main() {
       return
     }
     userId = authUser.user.id
-    console.log("user craeted sucess")
+    console.log("✅ User created successfully")
   }
 
   // update user profile we created it
@@ -56,7 +57,7 @@ async function main() {
       console.error(profileError.message)
       return
     }
-    console.log("💎 User profile update successfuly")
+    console.log("💎 User profile update successfully")
   }
 
   // delete prv moods if user already exist

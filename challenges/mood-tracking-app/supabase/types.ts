@@ -41,35 +41,35 @@ export type Database = {
     Tables: {
       moods: {
         Row: {
-          created_at: string | null
-          feelings: string[] | null
+          created_at: string
+          feelings: string[]
           id: string
-          journal: string | null
-          mood_level: number | null
-          sleep_hours: number | null
+          journal: string
+          mood_level: number
+          sleep_hours: number
           user_id: string | null
         }
         Insert: {
-          created_at?: string | null
-          feelings?: string[] | null
+          created_at?: string
+          feelings: string[]
           id?: string
-          journal?: string | null
-          mood_level?: number | null
-          sleep_hours?: number | null
+          journal: string
+          mood_level: number
+          sleep_hours: number
           user_id?: string | null
         }
         Update: {
-          created_at?: string | null
-          feelings?: string[] | null
+          created_at?: string
+          feelings?: string[]
           id?: string
-          journal?: string | null
-          mood_level?: number | null
-          sleep_hours?: number | null
+          journal?: string
+          mood_level?: number
+          sleep_hours?: number
           user_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "moods_user_id_fkey"
+            foreignKeyName: "fk_profile"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
