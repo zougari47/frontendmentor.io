@@ -100,6 +100,19 @@
   @apply text-[12px] font-normal leading-[110%];
 }
 
+.animate-spin {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* CSS to replace the dropdown menu by radix in mobile view  */
 @media (max-width: 768px) {
   div[data-radix-popper-content-wrapper] {
