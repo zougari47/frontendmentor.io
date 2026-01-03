@@ -5,6 +5,7 @@ import { getAvg } from "@/lib/utils"
 
 import { AvgMoodCard } from "./avg-mood-card"
 import { AvgSleepCard } from "./avg-sleep-card"
+import { Chart } from "./chart"
 
 type Mood = Tables<"moods">
 
@@ -46,22 +47,17 @@ export function Statistics({ moods }: StatisticsProps) {
   const last5DaysMoodAvg = getAvg(last5Days, "mood_level")
   const prev5DaysMoodAvg = getAvg(prev5Days, "mood_level")
 
-  console.log({
-    last5DaysSleepAvg,
-    prev5DaysSleepAvg,
-    last5DaysMoodAvg,
-    prev5DaysMoodAvg,
-  })
-
   return (
     <section
       aria-labelledby="Statistics"
-      className="mt-400 flex h-screen flex-col"
+      className="mt-400 gap-400 mb-1000 flex flex-col lg:flex-row"
     >
-      <div className="rounded-16 space-y-300 px-200 py-250 border border-blue-100 bg-neutral-100">
+      <div className="rounded-16 space-y-300 px-200 py-250 bg-neutral-0 border border-blue-100 lg:w-[370px]">
         <AvgMoodCard lastAvg={last5DaysMoodAvg} prevAvg={prev5DaysMoodAvg} />
         <AvgSleepCard lastAvg={last5DaysSleepAvg} prevAvg={prev5DaysSleepAvg} />
       </div>
+
+      <Chart moods={moods} />
     </section>
   )
 }

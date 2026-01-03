@@ -1,14 +1,12 @@
 import { redirect } from "next/navigation"
 import { Mood } from "@/schemas/mood"
 
-import { FORTNIGHT_IN_MS } from "@/lib/constants"
+import { TEN_DAYS_MS } from "@/lib/constants"
 import { createClient } from "@/lib/supabase/server"
 import { MoodDialog } from "@/components/dialogs/mood"
 import { Greeting } from "@/components/gretting"
 import { Header } from "@/components/header"
 import { Statistics } from "@/components/statistics"
-
-// import { Statistics } from "@/components/statistics"
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -16,32 +14,34 @@ export default async function DashboardPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-
   if (!user) {
     redirect("/auth/login")
   }
+
+  const startDate = new Date(Date.now() - TEN_DAYS_MS)
+  const startDateStr = startDate.toISOString().split("T")[0] // "YYYY-MM-DD"
 
   const { data, error } = await supabase
     .from("profiles")
     .select("name, avatar_url, moods (*)")
     .eq("id", user?.id)
-    .gt(
-      "moods.created_at",
-      new Date(Date.now() - FORTNIGHT_IN_MS).toISOString()
-    )
+    .gte("moods.created_at::date", startDateStr)
     .single()
 
-  const moods: Mood[] = (data?.moods || []).map((m) => ({
-    mood: m.mood_level ?? 0,
-    emotions: (m.feelings as any) ?? [],
-    dayDescription: m.journal ?? "",
-    sleepHours: m.sleep_hours ?? 0,
-  }))
+  console.table(
+    data?.moods?.map((m) => ({
+      date: new Date(m.created_at)
+        .toLocaleDateString("en-GB", { day: "2-digit", month: "short" })
+        .replace(" ", "")
+        .toLowerCase(),
+      mood_level: m.mood_level,
+      sleep_hours: m.sleep_hours,
+    }))
+  )
 
   const dashboardData = {
     ...data,
     email: user?.email,
-    moods,
   }
 
   if (error) return <div>Error {error.message}</div>

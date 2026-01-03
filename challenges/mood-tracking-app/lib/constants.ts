@@ -10,7 +10,7 @@ import { VeryHappy as ColoredVeryHappy } from "@/components/icons/moods/colored/
 import { VerySad as ColoredVerySad } from "@/components/icons/moods/colored/very-sad"
 
 export const MS_PER_DAY = 24 * 60 * 60 * 1000
-export const FORTNIGHT_IN_MS = 14 * MS_PER_DAY
+export const TEN_DAYS_MS = 10 * MS_PER_DAY
 
 export const emotions = [
   "Joyful",
@@ -44,6 +44,14 @@ export const sleepRangeBounds = [
   [7, 8],
   [9, 10],
 ] as const
+/* height of pillars per sleep hours in the chart  */
+export const sleepPxValues = [
+  "h-[41px]",
+  "h-[95px]",
+  "h-[148px]",
+  "h-[200px]",
+  "h-[253px]",
+] as const
 
 export const TOTAL_STEPS = 4 as const
 export const stepTitles = [
@@ -72,7 +80,6 @@ export const MoodIconsColor = [
   ColoredHappy,
   ColoredVeryHappy,
 ] as const
-
 export const MoodIconsMono = [
   MonochromeVerySad,
   MonochromeSad,
@@ -80,15 +87,13 @@ export const MoodIconsMono = [
   MonochromeHappy,
   MonochromeVeryHappy,
 ] as const
-
 export const MoodBgColors = [
   "bg-red-300",
   "bg-indigo-200",
   "bg-blue-300",
   "bg-green-300",
   "bg-amber-300",
-]
-
+] as const
 export const moodLabels = [
   "Very Sad",
   "Sad",

@@ -49,6 +49,8 @@
   --radius-20: 20px;
   --radius-24: 24px;
   --radius-full: 999px;
+
+  --animate-spin: spin 1.5s linear infinite;
 }
 
 @utility bg-gradient {
@@ -100,8 +102,17 @@
   @apply text-[12px] font-normal leading-[110%];
 }
 
-.animate-spin {
-  animation: spin 2s linear infinite;
+@utility animate-grow {
+  animation: grow 1.5s ease-out forwards;
+}
+
+@keyframes grow {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
 }
 
 @keyframes spin {
