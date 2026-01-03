@@ -55,8 +55,6 @@ export function Chart({ moods }: ChartProps) {
     }
   })
 
-  console.log("moods length", moods.length)
-
   return (
     <div className="bg-neutral-0 md:p-300 lg:p-400 rounded-16 px-200 py-250 w-full overflow-hidden border border-blue-100 lg:flex-1">
       <h2 className="txt-preset-3-mobile mb-250 md:txt-preset-3 text-neutral-900">
@@ -93,12 +91,15 @@ export function Chart({ moods }: ChartProps) {
               "relative z-40 h-full w-auto overflow-x-auto overflow-y-hidden"
             )}
           >
-            {/* pipes + months */}
-            <div className="gap-200 flex h-full min-w-fit lg:justify-between lg:gap-0">
+            {/* pillars + month/day */}
+            <div className="gap-200 flex h-full min-w-fit">
               {days.map((day, i) => (
                 <div
                   key={day.dayOfMonth}
-                  className="w-500 pt-auto flex flex-col gap-[11px]"
+                  className={cn(
+                    "w-500 pt-auto flex flex-col gap-[11px]",
+                    i > 0 && i < days.length - 1 && "mx-auto"
+                  )}
                 >
                   {/* pillars  */}
                   <div

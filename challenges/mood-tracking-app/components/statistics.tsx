@@ -52,7 +52,7 @@ export function Statistics({ moods }: StatisticsProps) {
       aria-labelledby="Statistics"
       className="mt-400 gap-400 mb-1000 flex flex-col lg:flex-row"
     >
-      <div className="rounded-16 space-y-300 px-200 py-250 bg-neutral-0 border border-blue-100 lg:w-[370px]">
+      <div className="rounded-16 space-y-300 px-200 py-250 bg-neutral-0 border border-blue-100 lg:flex lg:w-[370px] lg:flex-col">
         <AvgMoodCard lastAvg={last5DaysMoodAvg} prevAvg={prev5DaysMoodAvg} />
         <AvgSleepCard lastAvg={last5DaysSleepAvg} prevAvg={prev5DaysSleepAvg} />
       </div>

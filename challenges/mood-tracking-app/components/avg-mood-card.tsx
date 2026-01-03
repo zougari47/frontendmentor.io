@@ -31,7 +31,7 @@ export function AvgMoodCard({ lastAvg, prevAvg }: MoodCardProps) {
         : "Same as"
 
   return (
-    <div>
+    <div className="grid grid-rows-[auto_1fr] lg:flex-1">
       <h2 className="txt-preset-5 mb-150 text-neutral-900">
         <span>Average Mood</span>
         <span className="txt-preset-7 text-neutral-600">
@@ -42,7 +42,7 @@ export function AvgMoodCard({ lastAvg, prevAvg }: MoodCardProps) {
 
       <div
         className={cn(
-          "rounded-20 px-200 py-250 space-y-150 relative z-50",
+          "rounded-20 px-200 py-250 space-y-150 lg: relative z-50 lg:flex lg:flex-col lg:justify-evenly",
           lastAvg ? MoodBgColors[lastAvg] : "bg-blue-100"
         )}
       >
@@ -51,7 +51,7 @@ export function AvgMoodCard({ lastAvg, prevAvg }: MoodCardProps) {
           {Icon && <Icon />}
           <span className="txt-preset-4 text-neutral-900">{title}</span>
         </h3>
-        <p className="gap-150 flex items-center">
+        <p className="gap-150 lg:pr-200 flex items-center lg:items-start">
           {trend == "up" && <ArrowUpRight size={24} />}
           {trend == "same" && <ArrowRight size={24} />}
           {trend == "down" && <ArrowDownRight size={24} />}

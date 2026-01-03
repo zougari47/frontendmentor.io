@@ -1,12 +1,6 @@
 import { ArrowDownRight, ArrowRight, ArrowUpRight } from "lucide-react"
 
-import {
-  MoodBgColors,
-  MoodIconsMono,
-  moodLabels,
-  sleepRangeBounds,
-  sleepRanges,
-} from "@/lib/constants"
+import { sleepRangeBounds, sleepRanges } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 
 import { PatternSVG } from "./icons/pattern"
@@ -45,9 +39,9 @@ export function AvgSleepCard({ lastAvg, prevAvg }: SleepCardProps) {
         : "Same as"
 
   return (
-    <div>
+    <div className="grid grid-rows-[auto_1fr] lg:flex-1">
       <h2 className="txt-preset-5 mb-150 text-neutral-900">
-        <span>Average Mood</span>
+        <span>Average Sleep</span>
         <span className="txt-preset-7 text-neutral-600">
           {" "}
           (Last 5 check-ins)
@@ -56,7 +50,7 @@ export function AvgSleepCard({ lastAvg, prevAvg }: SleepCardProps) {
 
       <div
         className={cn(
-          "rounded-20 px-200 py-250 space-y-150 relative z-50",
+          "rounded-20 px-200 py-250 space-y-150 relative z-50 lg:flex lg:flex-col lg:justify-around",
           lastAvg ? "bg-blue-600" : "bg-blue-100"
         )}
       >
@@ -74,7 +68,7 @@ export function AvgSleepCard({ lastAvg, prevAvg }: SleepCardProps) {
         </h3>
         <p
           className={cn(
-            "gap-150 flex items-center",
+            "gap-150 lg:pr-600 flex items-center",
             lastAvg ? "text-neutral-0" : "text-neutral-900"
           )}
         >
