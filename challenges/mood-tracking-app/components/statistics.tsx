@@ -15,24 +15,24 @@ interface StatisticsProps {
 
 export function Statistics({ moods }: StatisticsProps) {
   const now = new Date()
-  const todayStart = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate()
-  ).getTime()
+  const todayStartUTC = Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate()
+  )
 
   const last5Days: Mood[] = []
   const prev5Days: Mood[] = []
 
   moods.forEach((mood) => {
     const moodDate = new Date(mood.created_at)
-    const moodStart = new Date(
-      moodDate.getFullYear(),
-      moodDate.getMonth(),
-      moodDate.getDate()
-    ).getTime()
+    const moodStartUTC = Date.UTC(
+      moodDate.getUTCFullYear(),
+      moodDate.getUTCMonth(),
+      moodDate.getUTCDate()
+    )
 
-    const diffDays = (todayStart - moodStart) / MS_PER_DAY
+    const diffDays = (todayStartUTC - moodStartUTC) / MS_PER_DAY
 
     if (diffDays > 0 && diffDays <= 5) {
       last5Days.push(mood)

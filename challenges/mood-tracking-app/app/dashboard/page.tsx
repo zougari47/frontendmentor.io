@@ -19,20 +19,26 @@ export default async function DashboardPage() {
     redirect("/auth/login")
   }
 
-  const startDate = new Date(Date.now() - TEN_DAYS_MS)
+  const startDate = new Date(
+    Date.UTC(
+      new Date().getUTCFullYear(),
+      new Date().getUTCMonth(),
+      new Date().getUTCDate() - 10
+    )
+  )
 
   const { data, error } = await supabase
     .from("profiles")
     .select("name, avatar_url, moods (*)")
     .eq("id", user?.id)
-    .gte("moods.created_at::date", startDate.toISOString())
+    .gte("moods.created_at", startDate.toISOString())
     .single()
 
   const dashboardData = {
     ...data,
     email: user?.email,
   }
-
+  data?.moods.map((x) => console.log(x.created_at))
   const todayMood =
     data?.moods?.find(({ created_at }) => isToday(created_at)) ?? null
 
