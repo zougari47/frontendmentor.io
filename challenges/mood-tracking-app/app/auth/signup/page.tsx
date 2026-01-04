@@ -33,13 +33,8 @@ export default function SignUpPage() {
   const { isSubmitting } = form.formState
 
   async function onSubmit(values: z.infer<typeof signupSchema>) {
-    try {
-      const { error } = await signup(values)
-
-      if (error) setError(error.message)
-    } catch (err) {
-      console.error(err)
-    }
+    const { error } = await signup(values)
+    if (error) setError(error)
   }
 
   return (
