@@ -6,6 +6,9 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+/**
+ * @returns the current date like this format "Sunday, January 4th, 2026"
+ */
 export function getCurrentDate() {
   const today = new Date()
   const day = today.getDate()
@@ -26,6 +29,19 @@ export function getCurrentDate() {
     .format(today)
     .replace(String(day), `${day}${ordinal}`)
   return formattedDate
+}
+
+export function isToday(dateStr: string, referenceDate = new Date()): boolean {
+  const d = new Date(dateStr)
+  return (
+    d.getUTCFullYear() === referenceDate.getUTCFullYear() &&
+    d.getUTCMonth() === referenceDate.getUTCMonth() &&
+    d.getUTCDate() === referenceDate.getUTCDate()
+  )
+}
+
+export function getDayStartUTC(date: Date): number {
+  return Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
 }
 
 type Mood = Tables<"moods">

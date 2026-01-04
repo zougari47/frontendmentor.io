@@ -1,6 +1,6 @@
 "use client"
 
-import { Tables } from "@/supabase/types"
+import type { Tables } from "@/supabase/types"
 
 import {
   MoodBgColors,
@@ -10,7 +10,7 @@ import {
   sleepPxValues,
   sleepRanges,
 } from "@/lib/constants"
-import { cn } from "@/lib/utils"
+import { cn, getDayStartUTC } from "@/lib/utils"
 
 import { SleepIcon } from "./icons/sleep"
 
@@ -20,23 +20,15 @@ interface ChartProps {
 
 export function Chart({ moods }: ChartProps) {
   const now = new Date()
-  const todayStart = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate()
-  ).getTime()
+  const todayStartUTC = getDayStartUTC(now)
 
-  // Create 11 items (10 days ago + today)
+  // 11 items (10 days ago + today)
   const days = Array.from({ length: 11 }).map((_, i) => {
-    const timestamp = todayStart - (10 - i) * MS_PER_DAY
+    const timestamp = todayStartUTC - (10 - i) * MS_PER_DAY
     const date = new Date(timestamp)
 
     // Get the start of the day for comparison
-    const dayStart = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate()
-    ).getTime()
+    const dayStartUTC = getDayStartUTC(date)
 
     return {
       timestamp,
@@ -45,12 +37,7 @@ export function Chart({ moods }: ChartProps) {
       mood:
         moods.find((m) => {
           const moodDate = new Date(m.created_at)
-          const moodDayStart = new Date(
-            moodDate.getFullYear(),
-            moodDate.getMonth(),
-            moodDate.getDate()
-          ).getTime()
-          return moodDayStart === dayStart
+          return getDayStartUTC(moodDate) === dayStartUTC
         }) || null,
     }
   })
@@ -68,7 +55,7 @@ export function Chart({ moods }: ChartProps) {
           {[...sleepRanges].reverse().map((h) => (
             <div
               key={`hours${h}`}
-              className="txt-preset-9 [&_svg]:h-125 [&_svg]:w-125 gap-075 flex items-center text-neutral-600 [&_path]:fill-neutral-600"
+              className="txt-preset-9 [&_svg]:size-125 gap-075 flex items-center text-neutral-600 [&_path]:fill-neutral-600"
             >
               <SleepIcon />
               <span>{h} hours</span>
@@ -105,7 +92,7 @@ export function Chart({ moods }: ChartProps) {
                   <div
                     className={cn(
                       "mt-auto h-[200px] w-full min-w-fit rounded-full pt-[5px]",
-                      "animate-grow origin-bottom [&_svg]:mx-auto [&_svg]:h-[30px] [&_svg]:w-[30px]",
+                      "animate-grow origin-bottom [&_svg]:mx-auto [&_svg]:size-[30px]",
                       day.mood?.mood_level != null &&
                         MoodBgColors[day.mood?.mood_level],
                       day.mood?.sleep_hours != null &&

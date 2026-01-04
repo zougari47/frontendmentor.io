@@ -51,7 +51,7 @@ export function AvgMoodCard({ lastAvg, prevAvg }: MoodCardProps) {
           {Icon && <Icon />}
           <span className="txt-preset-4 text-neutral-900">{title}</span>
         </h3>
-        <p className="gap-150 lg:pr-200 flex items-center lg:items-start">
+        <p className="gap-150 lg:pr-600 flex items-center lg:items-start">
           {trend == "up" && <ArrowUpRight size={24} />}
           {trend == "same" && <ArrowRight size={24} />}
           {trend == "down" && <ArrowDownRight size={24} />}

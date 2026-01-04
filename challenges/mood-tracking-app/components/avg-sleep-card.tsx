@@ -68,7 +68,7 @@ export function AvgSleepCard({ lastAvg, prevAvg }: SleepCardProps) {
         </h3>
         <p
           className={cn(
-            "gap-150 lg:pr-600 flex items-center",
+            "gap-150 lg:pr-600 flex items-center lg:items-start",
             lastAvg ? "text-neutral-0" : "text-neutral-900"
           )}
         >
