@@ -16,10 +16,8 @@ export async function login({ email, password }: z.infer<typeof loginSchema>) {
     password,
   })
 
-  console.log({ error, user: _data.user })
-
   if (error) {
-    return { error }
+    return { error: error.message }
   }
 
   redirect("/dashboard")
@@ -32,7 +30,7 @@ export async function signup({ email, password }: z.infer<typeof loginSchema>) {
   const { error } = await supabase.auth.signUp({ email, password })
 
   if (error) {
-    return { error }
+    return { error: error.message }
   }
 
   cookieStore.set("flash", "Your account is created! You can login now!", {
