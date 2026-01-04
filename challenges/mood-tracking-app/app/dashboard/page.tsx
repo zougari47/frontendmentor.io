@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation"
 
-import { TEN_DAYS_MS } from "@/lib/constants"
 import { createClient } from "@/lib/supabase/server"
 import { isToday } from "@/lib/utils"
 import { MoodDialog } from "@/components/dialogs/mood"
@@ -53,7 +52,11 @@ export default async function DashboardPage() {
       />
 
       <Greeting name={dashboardData.name!} />
-      {todayMood ? <TodayMood mood={todayMood} /> : <MoodDialog />}
+      {todayMood ? (
+        <TodayMood userId={user.id} mood={todayMood} />
+      ) : (
+        <MoodDialog />
+      )}
 
       <Statistics moods={data?.moods} />
     </div>

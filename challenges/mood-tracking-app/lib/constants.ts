@@ -101,3 +101,46 @@ export const moodLabels = [
   "Happy",
   "Very Happy",
 ] as const
+
+export const moodQuotes = [
+  [
+    // Very Sad (0)
+    "Even the darkest night will end, and the sun will rise.",
+    "In the middle of winter, there is an invincible summer within.",
+    "Sometimes the worst place to be is in one’s own head.",
+    "Fall seven times, stand up eight.",
+    "All things break, and all things can be mended.",
+  ],
+  [
+    // Sad (1)
+    "It does not matter how slowly the journey goes as long as it does not stop.",
+    "The best way out is always through.",
+    "Thoughts do not have to be controlled; they simply do not need to be in control.",
+    "The wound is the place where the light can enter.",
+    "Just when the caterpillar thought the world was over, it became a butterfly.",
+  ],
+  [
+    // Neutral (2)
+    "The waves cannot be stopped, but it is possible to learn how to surf.",
+    "The present moment is filled with joy and happiness for those who pay attention.",
+    "Life is not made unbearable by circumstances, but by a lack of meaning and purpose.",
+    "Not every thought that appears needs to be believed.",
+    "Unsolved questions in the heart can be met with patience and gentle curiosity.",
+  ],
+  [
+    // Happy (3)
+    "Happiness can be found even in very dark times by remembering to turn on the light.",
+    "Joy and happiness are available in the present moment to those who are attentive.",
+    "Strength can be seen in having survived every difficult day so far.",
+    "Life is partly what happens and mostly how one responds to it.",
+    "The sun starts weak at dawn and gathers strength as the day goes on.",
+  ],
+  [
+    // Very Happy (4)
+    "What lies within a person matters more than what lies behind or ahead.",
+    "It is never too late to become what one might have been.",
+    "Greatness is not in never falling, but in rising every time after a fall.",
+    "The present moment is the only time truly under one’s influence.",
+    "Life is not about waiting for the storm to pass but learning to dance in the rain.",
+  ],
+]

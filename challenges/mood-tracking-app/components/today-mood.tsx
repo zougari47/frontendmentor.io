@@ -6,7 +6,7 @@ import {
   sleepHours,
   sleepRanges,
 } from "@/lib/constants"
-import { cn } from "@/lib/utils"
+import { cn, getDailyRandomQuote } from "@/lib/utils"
 
 import { QuoteIcon } from "./icons/quote"
 import { SleepIcon } from "./icons/sleep"
@@ -15,9 +15,10 @@ import { Card } from "./ui/card"
 
 interface TodayMoodProps {
   mood: Tables<"moods">
+  userId: string
 }
 
-export function TodayMood({ mood }: TodayMoodProps) {
+export function TodayMood({ mood, userId }: TodayMoodProps) {
   return (
     <div className="gap-250 lg:gap-400 flex flex-col lg:flex-row">
       {/* mood */}
@@ -47,7 +48,7 @@ export function TodayMood({ mood }: TodayMoodProps) {
         <div className="space-y-200 md:col-start-1 md:row-start-2 md:content-end [&_svg]:mx-auto md:[&_svg]:mx-0">
           <QuoteIcon />
           <span className="txt-preset-6-italic block text-center text-neutral-900 md:text-left">
-            "{mood.journal}"
+            "{getDailyRandomQuote(userId, mood.mood_level)}"
           </span>
         </div>
       </Card>
