@@ -16,10 +16,8 @@ export async function login({ email, password }: z.infer<typeof loginSchema>) {
     password,
   })
 
-  console.log({ error, user: _data.user })
-
   if (error) {
-    return { error }
+    return { error: error.message }
   }
 
   redirect("/dashboard")

@@ -46,7 +46,7 @@ export default function SignUpPage() {
 
   async function onSubmit(values: z.infer<typeof loginSchema>) {
     const { error } = await login(values)
-    if (error) setError(error.message)
+    if (error) setError(error)
   }
 
   return (
