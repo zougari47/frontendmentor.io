@@ -28,7 +28,6 @@ export const metadata: Metadata = {
     description: "Track your mood, sleep, and emotions with beautiful visual insights and personalized statistics.",
   },
   
-  viewport: "width=device-width, initial-scale=1",
   themeColor: "#4865DB",
   colorScheme: "light",
   
