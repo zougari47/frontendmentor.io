@@ -8,13 +8,11 @@ on:
         type: choice
         options:
           - mood-tracking-app
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Set Environment
         run: |
           case "${{ github.event.inputs.project }}" in
@@ -26,22 +24,6 @@ jobs:
               exit 1
               ;;
           esac
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-
-      - name: Install Dependencies
-        run: |
-          cd ./${{ env.DIR }}
-          npm install
-
-      - name: Build Next.js
-        run: |
-          cd ./${{ env.DIR }}
-          npm run build
-
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
         with:
