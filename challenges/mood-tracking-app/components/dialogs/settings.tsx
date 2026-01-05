@@ -41,7 +41,7 @@ export function SettingsDialog({
 }: SettingsDialogProps) {
   const form = useForm<z.infer<typeof profileSchema>>({
     resolver: zodResolver(profileSchema),
-    mode: "onChange",
+    mode: "onSubmit",
     defaultValues: {
       name: name,
       avatar: avatarUrl,

@@ -1,6 +1,5 @@
 "use server"
 
-import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { z } from "zod"
 
@@ -25,7 +24,6 @@ export async function login({ email, password }: z.infer<typeof loginSchema>) {
 
 export async function signup({ email, password }: z.infer<typeof loginSchema>) {
   const supabase = await createClient()
-  const cookieStore = await cookies()
 
   const { error } = await supabase.auth.signUp({ email, password })
 
@@ -33,9 +31,5 @@ export async function signup({ email, password }: z.infer<typeof loginSchema>) {
     return { error: error.message }
   }
 
-  cookieStore.set("flash", "Your account is created! You can login now!", {
-    httpOnly: false,
-    maxAge: 60,
-  })
-  redirect("/auth/login")
+  redirect("/onboarding")
 }

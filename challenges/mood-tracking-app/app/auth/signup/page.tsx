@@ -24,7 +24,7 @@ export default function SignUpPage() {
   const [error, setError] = useState<null | string>(null)
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
-    mode: "onChange",
+    mode: "onSubmit",
     defaultValues: {
       email: "",
       password: "",
