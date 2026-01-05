@@ -1,0 +1,52 @@
+name: Manual Deploy
+on:
+  workflow_dispatch:
+    inputs:
+      project:
+        description: "Select project to deploy"
+        required: true
+        type: choice
+        options:
+          - mood-tracking-app
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set Environment
+        run: |
+          case "${{ github.event.inputs.project }}" in
+            "mood-tracking-app")
+              echo "DIR=challenges/mood-tracking-app" >> $GITHUB_ENV
+              ;;
+            *)
+              echo "Invalid project"
+              exit 1
+              ;;
+          esac
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install Dependencies
+        run: |
+          cd ./${{ env.DIR }}
+          npm install
+
+      - name: Build Next.js
+        run: |
+          cd ./${{ env.DIR }}
+          npm run build
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: ./${{ env.DIR }}
+          vercel-args: '--prod'
