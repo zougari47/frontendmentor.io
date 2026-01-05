@@ -22,7 +22,7 @@ export function TodayMood({ mood, userId }: TodayMoodProps) {
   return (
     <div className="gap-250 lg:gap-400 flex flex-col lg:flex-row">
       {/* mood */}
-      <Card className="md:px-400 px-200 py-400 gap-400 grid overflow-hidden shadow-[0_0_20px_0_rgba(1,5,39,0.08)] md:grid-cols-2 md:grid-rows-2">
+      <Card className="md:px-400 lg:w-[670px] px-200 py-400 gap-400 grid overflow-hidden shadow-[0_0_20px_0_rgba(1,5,39,0.08)] md:grid-cols-2 md:grid-rows-2">
         <h2 className="text-center md:col-start-1 md:row-start-1 md:text-left">
           <span className="txt-preset-3 block text-neutral-900/70">
             I'm feeling
@@ -54,7 +54,7 @@ export function TodayMood({ mood, userId }: TodayMoodProps) {
       </Card>
 
       {/* reflection of the day */}
-      <div className="gap-250 flex flex-col">
+      <div className="gap-250 flex flex-col flex-1">
         <Card className="p-250 space-y-200">
           <div className="gap-150 flex items-center [&_path]:fill-neutral-600 [&_svg]:size-[22px]">
             <SleepIcon />
