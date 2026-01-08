@@ -17,6 +17,9 @@ Track your daily mood, sleep patterns, and emotions with visual insights.
 - Radix UI components for accessible UI elements
 - TypeScript support with generated types
 
+## Database Diagram
+
+<img width="1061" height="576" alt="mood-tracking-app-diagram" src="https://github.com/user-attachments/assets/ad5a5800-174d-4262-8ae4-30cc3d66c6a2" />
 
 ## Setup
 - Requirements: Minimum Node.js version: 20.9
