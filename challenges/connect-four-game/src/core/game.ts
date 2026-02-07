@@ -8,6 +8,27 @@ export const createBoard = () =>
   Array.from({ length: 7 }, () => Array(6).fill(null)) as Board
 
 /**
+ * helper function to log board 2D Matrix like Connect 4 UI game for debugin
+ */
+export const isBoardFull = (board: Board) => {
+  for (let col = 0; col < 7; col++) {
+    if (board[col].indexOf(null) != -1) {
+      return false
+    }
+  }
+  return true
+}
+
+/**
+ * helper function to log board 2D Matrix like Connect 4 UI game for debugin
+ */
+export const logBoard = (board: Board) => {
+  for (let row = 5; row >= 0; row--) {
+    console.log(board.map((col) => col[row] ?? " ").join(" | "))
+  }
+}
+
+/**
  * Adds a disk to the specified column of the board
  * @param x - Column index (0-6)
  * @param player - Player number (1 or 2)
@@ -38,7 +59,6 @@ export const addDiskToBoard = (
  * @param board - The game board
  * @returns true if player has connected 4, false otherwise
  */
-//TODO: case for draw
 export const checkWin = (
   x: number,
   y: number,
@@ -78,6 +98,7 @@ export const checkWin = (
       }
     } while (true)
   }
+
   // horizontal
   move(1, 0)
   move(-1, 0)
@@ -97,5 +118,5 @@ export const checkWin = (
   move(-1, 1)
   move(1, -1)
 
-  return isWinner
+  return isWinner ? true : isBoardFull(board) ? "DRAW" : false
 }

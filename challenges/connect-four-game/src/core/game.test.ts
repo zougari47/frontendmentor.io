@@ -251,17 +251,21 @@ describe("checkWin", () => {
       expect(checkWin(4, row, 1, board)).toBe(true)
     })
 
-    it("handles full board without win", () => {
-      // Fill board in a pattern that prevents any wins
+    it("handles DRAW with full board", () => {
+      const patterns = {
+        even: [1, 1, 2, 2, 1, 1],
+        odd: [2, 2, 1, 1, 2, 2],
+      }
+
       for (let col = 0; col < 7; col++) {
+        const pat = col % 2 === 0 ? patterns.even : patterns.odd
         for (let row = 0; row < 6; row++) {
-          // Alternate players in a checkerboard pattern
-          board[col][row] = (((col + row) % 2) + 1) as Player
+          board[col][row] = pat[row] as Player
         }
       }
 
-      expect(checkWin(3, 3, 1, board)).toBe(false)
-      expect(checkWin(3, 3, 2, board)).toBe(false)
+      expect(checkWin(3, 3, 1, board)).toBe("DRAW")
+      expect(checkWin(3, 3, 2, board)).toBe("DRAW")
     })
 
     it("returns false when single disk on board", () => {
