@@ -1,1 +1,44 @@
 @import "tailwindcss";
+
+@theme {
+  /* Colors */
+  --color-purple: #7945ff;
+  --color-dark-purple: #5c2dd5;
+  --color-red: #fd6687;
+  --color-yellow: #ffce67;
+  --color-black: #000000;
+  --color-white: #ffffff;
+
+  /* Typography */
+  --font-space-grotesk: "Space Grotesk", sans-serif;
+}
+
+@utility text-heading-l {
+  font-size: 56px;
+  line-height: 71px;
+  font-weight: 700;
+}
+
+@utility text-heading-m {
+  font-size: 24px;
+  line-height: 31px;
+  font-weight: 700;
+}
+
+@utility text-heading-s {
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 700;
+}
+
+@utility text-heading-xs {
+  font-size: 16px;
+  line-height: 21px;
+  font-weight: 700;
+}
+
+@utility text-body {
+  font-size: 16px;
+  line-height: 21px;
+  font-weight: 500;
+}

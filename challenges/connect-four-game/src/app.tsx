@@ -1,34 +1,34 @@
-import { addDiskToBoard, createBoard } from "@/core/game"
-import type { Player } from "@/core/types"
-import { useState } from "preact/hooks"
+import { Button } from "./components/ui/button"
+import { IconCheck, IconCPU, IconPlayer } from "./components/ui/icons"
 
-const gameBoard = createBoard()
 export function App() {
-  const [currentPlayer, setCurrentPlayer] = useState<Player>(1)
-
   return (
-    <div>
-      <h1>Current palyer {currentPlayer}</h1>
-      <div class="board">
-        {gameBoard.map((col, x) => (
-          <div
-            class="column"
-            key={x}
-            onClick={() => {
-              const hasSpace = addDiskToBoard(x, currentPlayer, gameBoard)
-              hasSpace && setCurrentPlayer((prev) => (prev === 1 ? 2 : 1))
-            }}
-          >
-            {col
-              .slice()
-              .reverse()
-              .map((cell, y) => (
-                <div class="cell" key={y}>
-                  {cell === null ? "" : cell}
-                </div>
-              ))}
-          </div>
-        ))}
+    <div className="flex min-h-screen flex-col items-center justify-center gap-8 bg-white p-8">
+      <div className="flex w-full max-w-md flex-col gap-6">
+        <h2 className="text-heading-s text-white">Primary Variants</h2>
+
+        <Button variant="primary-red" icon={<IconCPU />}>
+          Play vs CPU
+        </Button>
+
+        <Button variant="primary-yellow" icon={<IconPlayer />}>
+          Play vs Player
+        </Button>
+
+        <Button variant="primary-white">Game Rules</Button>
+      </div>
+
+      <div className="flex w-full max-w-md flex-col gap-6">
+        <h2 className="text-heading-s text-white">Secondary Variants</h2>
+        <div className="flex gap-4">
+          <Button variant="secondary-purple">Menu</Button>
+          <Button variant="secondary-red">Restart</Button>
+        </div>
+      </div>
+
+      <div className="flex w-full max-w-md flex-col items-center gap-6">
+        <h2 className="text-heading-s text-white">Icon Variant</h2>
+        <Button variant="icon-checkmark" icon={<IconCheck />} />
       </div>
     </div>
   )
