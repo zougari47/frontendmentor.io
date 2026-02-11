@@ -1,9 +1,6 @@
-import { useState } from "preact/hooks"
-
-import "./app.css"
-
 import { addDiskToBoard, createBoard } from "@/core/game"
 import type { Player } from "@/core/types"
+import { useState } from "preact/hooks"
 
 const gameBoard = createBoard()
 export function App() {
