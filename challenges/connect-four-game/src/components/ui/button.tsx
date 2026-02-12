@@ -66,7 +66,7 @@ export function MenuButton({
   children,
   className,
   ...props
-}: ButtonWithIconProps) {
+}: ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
       {...props}
@@ -86,7 +86,7 @@ export function CheckButton({
   children,
   className,
   ...props
-}: ButtonWithIconProps) {
+}: ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
       className={cn(
