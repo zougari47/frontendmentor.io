@@ -1,11 +1,12 @@
-export function IconCPU() {
+export function PlayVsCPU() {
   return (
     <svg
-      width="82"
-      height="46"
+      width={82}
+      height={46}
       viewBox="0 0 82 46"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className="right-4.25 absolute top-1/2 -translate-y-1/2"
     >
       <g id="player-vs-cpu">
         <circle id="Oval Copy 20" cx="59" cy="23" r="23" fill="white" />
@@ -63,13 +64,14 @@ export function IconCPU() {
   )
 }
 
-export function IconPlayer() {
+export function PlayVsPlayer() {
   return (
     <svg
-      width="82"
-      height="46"
+      width={82}
+      height={46}
       viewBox="0 0 82 46"
       fill="none"
+      className="right-4.25 absolute top-1/2 -translate-y-1/2"
       xmlns="http://www.w3.org/2000/svg"
     >
       <g id="player-vs-player">
