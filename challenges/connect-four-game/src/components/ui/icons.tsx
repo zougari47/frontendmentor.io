@@ -124,22 +124,34 @@ export function PlayVsPlayer() {
   )
 }
 
-export function IconCheck() {
+export function Logo(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
-      width="34"
-      height="24"
-      viewBox="0 0 34 24"
+      width="58"
+      height="61"
+      viewBox="0 0 58 61"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      {...props}
     >
-      <path
-        d="M2 12L12 22L32 2"
-        stroke="white"
-        strokeWidth="5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      <g id="logo">
+        <g id="Group 23">
+          <circle id="Oval Copy 47" cx="13" cy="13" r="13" fill="black" />
+          <circle id="Oval Copy 51" cx="45" cy="13" r="13" fill="black" />
+          <circle id="Oval Copy 53" cx="13" cy="45" r="13" fill="black" />
+          <circle id="Oval Copy 52" cx="45" cy="45" r="13" fill="black" />
+        </g>
+        <g id="Group 23 Copy">
+          <circle id="Oval Copy 47_2" cx="13" cy="16" r="13" fill="black" />
+          <circle id="Oval Copy 51_2" cx="45" cy="16" r="13" fill="black" />
+          <circle id="Oval Copy 53_2" cx="13" cy="48" r="13" fill="black" />
+          <circle id="Oval Copy 52_2" cx="45" cy="48" r="13" fill="black" />
+        </g>
+        <circle id="Oval Copy 11" cx="13" cy="13" r="10" fill="#FD6687" />
+        <circle id="Oval Copy 25" cx="45" cy="45" r="10" fill="#FD6687" />
+        <circle id="Oval Copy 23" cx="45" cy="13" r="10" fill="#FFCE67" />
+        <circle id="Oval Copy 24" cx="13" cy="45" r="10" fill="#FFCE67" />
+      </g>
     </svg>
   )
 }

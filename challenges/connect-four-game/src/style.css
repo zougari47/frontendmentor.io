@@ -42,3 +42,13 @@
   line-height: 21px;
   font-weight: 500;
 }
+
+@utility list-decimal-no-dot {
+  list-style-type: decimal;
+  list-style-position: inside;
+
+  & li::marker {
+    text: red;
+  }
+  /* content: counter(list-item) " "; */
+}

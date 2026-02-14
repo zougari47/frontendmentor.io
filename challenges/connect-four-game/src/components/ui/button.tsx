@@ -89,13 +89,14 @@ export function CheckButton({
 }: ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
+      {...props}
       className={cn(
-        "bg-red flex size-16 items-center justify-center rounded-full",
+        "bg-red flex size-16 rounded-full",
         "border-3 text-heading-m cursor-pointer border-black",
         "shadow-[0_10px_0_0_var(--color-black)] transition-all duration-200",
-        "hover:shadow-dark-purple hover:border-dark-purple"
+        "hover:shadow-dark-purple hover:border-dark-purple",
+        className
       )}
-      {...props}
     >
       <span className="sr-only">close</span>
       <svg
@@ -104,6 +105,7 @@ export function CheckButton({
         viewBox="0 0 33 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        className="m-auto"
       >
         <path
           d="M1.06055 10.6426L11.3246 20.9066L31.1705 1.06067"
