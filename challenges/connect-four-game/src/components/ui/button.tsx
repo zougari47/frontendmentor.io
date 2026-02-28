@@ -77,7 +77,7 @@ export function MenuButton({
         className
       )}
     >
-      menu
+      {children}
     </button>
   )
 }

@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useGame } from "@/GameContext"
 
 import { cn } from "@/lib/utils"
 import { Button, ButtonWithIcon, CheckButton } from "@/components/ui/button"
@@ -7,8 +8,15 @@ import { Logo, PlayVsPlayer } from "@/components/ui/icons"
 
 export function MainMenu() {
   const [showRules, setShowRules] = useState(false)
+  const { setIsPlaying } = useGame()
+
   return (
-    <main className="bg-purple md:bg-dark-purple flex h-screen w-screen items-center justify-center">
+    <main
+      className={cn(
+        "bg-purple flex h-screen w-screen items-center justify-center",
+        !showRules && "md:bg-dark-purple"
+      )}
+    >
       {showRules ? (
         <GameRules close={() => setShowRules(false)} />
       ) : (
@@ -21,7 +29,11 @@ export function MainMenu() {
         >
           <Logo className="mb-19.75 mx-auto block" />
           <nav className="gap-7.5 mx-auto grid justify-items-center">
-            <ButtonWithIcon variant="yellow" icon={<PlayVsPlayer />}>
+            <ButtonWithIcon
+              variant="yellow"
+              icon={<PlayVsPlayer />}
+              onClick={() => setIsPlaying(true)}
+            >
               play vs player
             </ButtonWithIcon>
             <Button

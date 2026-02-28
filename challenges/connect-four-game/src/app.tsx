@@ -1,8 +1,9 @@
-import { useGame } from "@/context/GameContext"
+import { useGame } from "@/GameContext"
 
+import { GameLayout } from "@/components/game-layout"
 import { MainMenu } from "@/components/main-menu"
 
 export function App() {
   const { isPlaying } = useGame()
-  return !isPlaying ? <MainMenu /> : <div>game</div>
+  return !isPlaying ? <MainMenu /> : <GameLayout />
 }
