@@ -11,12 +11,14 @@
     "test:bail": "vitest --bail=1"
   },
   "dependencies": {
+    "@base-ui/react": "^1.2.0",
     "@tailwindcss/vite": "^4.1.18",
     "clsx": "^2.1.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "tailwind-merge": "^3.4.0",
-    "tailwindcss": "^4.1.18"
+    "tailwindcss": "^4.1.18",
+    "tw-animate-css": "^1.4.0"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",

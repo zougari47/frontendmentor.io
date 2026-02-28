@@ -6,7 +6,7 @@ export function Board() {
   return (
     <div className="relative w-full">
       <div className="z-100 absolute flex h-full w-full bg-green-300/40">
-        {board.map((col, i) => (
+        {board.map((_, i) => (
           <div key={`col-${i + 1}`} className="w-1/7 h-full border-r"></div>
         ))}
       </div>

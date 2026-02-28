@@ -8,6 +8,7 @@ interface GameState {
   setIsPlaying: (isPlaying: boolean) => void
   board: Board
   setBoard: (board: Board) => void
+  restart: () => void
 }
 
 const GameContext = createContext<GameState | undefined>(undefined)
@@ -16,8 +17,15 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [board, setBoard] = useState(() => createBoard())
 
+  function restart() {
+    setIsPlaying(false)
+    setBoard(() => createBoard())
+  }
+
   return (
-    <GameContext.Provider value={{ isPlaying, setIsPlaying, board, setBoard }}>
+    <GameContext.Provider
+      value={{ isPlaying, setIsPlaying, board, setBoard, restart }}
+    >
       {children}
     </GameContext.Provider>
   )
