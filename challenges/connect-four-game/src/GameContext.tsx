@@ -1,30 +1,58 @@
 import { createContext, useContext, useState, type ReactNode } from "react"
 
-import { createBoard } from "@/lib/core/game"
-import type { Board } from "@/lib/core/types"
+import { addDiskToBoard, createBoard } from "@/lib/core/game"
+import type { Board, Player } from "@/lib/core/types"
 
 interface GameState {
   isPlaying: boolean
   setIsPlaying: (isPlaying: boolean) => void
   board: Board
   setBoard: (board: Board) => void
+  addDisk: (col: number, player: Player) => void
+  currentPlayer: Player
   restart: () => void
+  score: {
+    playerOne: number
+    playerTwo: number
+  }
 }
 
 const GameContext = createContext<GameState | undefined>(undefined)
 
 export function GameProvider({ children }: { children: ReactNode }) {
   const [isPlaying, setIsPlaying] = useState(false)
+  const [score, setScore] = useState({
+    playerOne: 0,
+    playerTwo: 0,
+  })
   const [board, setBoard] = useState(() => createBoard())
+  const [currentPlayer, setCurrentPlayer] = useState<Player>(1)
+
+  function addDisk(col: number, player: Player) {
+    const tempBoard = board.map((col) => [...col])
+    addDiskToBoard(col, player, tempBoard)
+
+    setBoard(tempBoard)
+    setCurrentPlayer((prev) => (prev === 1 ? 2 : 1))
+  }
 
   function restart() {
     setIsPlaying(false)
-    setBoard(() => createBoard())
+    setBoard(createBoard())
   }
 
   return (
     <GameContext.Provider
-      value={{ isPlaying, setIsPlaying, board, setBoard, restart }}
+      value={{
+        isPlaying,
+        setIsPlaying,
+        board,
+        setBoard,
+        restart,
+        score,
+        addDisk,
+        currentPlayer,
+      }}
     >
       {children}
     </GameContext.Provider>

@@ -43,3 +43,28 @@
   line-height: 21px;
   font-weight: 500;
 }
+
+@utility animate-disk-drop {
+  animation: disk-drop 0.6s ease-in forwards;
+}
+
+@keyframes disk-drop {
+  0% {
+    transform: translate(calc(var(--x) * 1px), calc(var(--from-y) * 1px));
+  }
+  60% {
+    transform: translate(calc(var(--x) * 1px), calc(var(--y) * 1px));
+  }
+  75% {
+    transform: translate(calc(var(--x) * 1px), calc((var(--y) - 12) * 1px));
+  }
+  85% {
+    transform: translate(calc(var(--x) * 1px), calc(var(--y) * 1px));
+  }
+  92% {
+    transform: translate(calc(var(--x) * 1px), calc((var(--y) - 5) * 1px));
+  }
+  100% {
+    transform: translate(calc(var(--x) * 1px), calc(var(--y) * 1px));
+  }
+}
