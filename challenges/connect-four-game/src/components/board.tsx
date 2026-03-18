@@ -14,8 +14,13 @@ function getCY(row: number) {
 }
 
 export function Board() {
-  const { board, addDisk, currentPlayer } = useGame()
+  const { board, addDisk, currentPlayer, gameResult, isPaused, winningCells } = useGame()
   const [hoveredCol, setHoveredCol] = useState<number | null>(null)
+
+  const isInteractive = !gameResult && !isPaused
+
+  const isWinningCell = (col: number, row: number) =>
+    winningCells?.some(([c, r]) => c === col && r === row) ?? false
 
   // Position arrow as % of SVG width so it scales correctly
   // Column center in SVG units: col * 88 + 52, total width: 632
@@ -45,7 +50,7 @@ export function Board() {
                 fillRule="evenodd"
                 clipRule="evenodd"
                 d="M3 14.6159C3 16.194 3.74501 17.6795 5.0098 18.6233L15.9416 26.7804C17.708 28.0984 20.129 28.1045 21.9019 26.7953L32.9701 18.6225C34.2467 17.6799 35 16.1872 35 14.6002V8C35 5.23858 32.7614 3 30 3H8C5.23858 3 3 5.23858 3 8V14.6159Z"
-                fill={`var(--color-${currentPlayer === 2 ? "red" : "yellow"})`}
+                fill={`var(--color-${currentPlayer === 1 ? "red" : "yellow"})`}
               />
               <path
                 d="M15.0449 27.9824C17.3412 29.6957 20.4882 29.7038 22.793 28.002L33.8613 19.8291C35.5207 18.6037 36.4999 16.6634 36.5 14.6006V8C36.5 4.41015 33.5899 1.5 30 1.5H8C4.41015 1.5 1.5 4.41015 1.5 8V14.6162C1.50008 16.6675 2.4684 18.5983 4.1123 19.8252L15.0449 27.9824Z"
@@ -238,7 +243,7 @@ export function Board() {
                   cx="35"
                   cy="35"
                   r="32"
-                  fill={`var(--color-${cell === 1 ? "yellow" : "red"})`}
+                  fill={`var(--color-${cell === 1 ? "red" : "yellow"})`}
                 />
                 <circle
                   cx="35"
@@ -248,6 +253,16 @@ export function Board() {
                   strokeWidth="3"
                   fill="none"
                 />
+                {isWinningCell(col, row) && (
+                  <circle
+                    cx="35"
+                    cy="35"
+                    r="14"
+                    stroke="var(--color-white)"
+                    strokeWidth="6"
+                    fill="none"
+                  />
+                )}
               </g>
             )
           })
@@ -285,8 +300,8 @@ export function Board() {
             height={584}
             fill="transparent"
             style={{ cursor: "pointer" }}
-            onClick={() => addDisk(col, currentPlayer)}
-            onMouseEnter={() => setHoveredCol(col)}
+            onClick={() => isInteractive && addDisk(col)}
+            onMouseEnter={() => isInteractive && setHoveredCol(col)}
             onMouseLeave={() => setHoveredCol(null)}
           />
         ))}

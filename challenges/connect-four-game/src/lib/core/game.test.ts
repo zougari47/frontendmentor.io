@@ -1,5 +1,5 @@
-import { addDiskToBoard, checkWin, createBoard } from "@/core/game"
-import type { Board, Player } from "@/core/types"
+import { addDiskToBoard, checkWin, createBoard } from "@/lib/core/game"
+import type { Board, Player } from "@/lib/core/types"
 import { beforeEach, describe, expect, it } from "vitest"
 
 let board: Board
@@ -50,10 +50,10 @@ describe("checkWin", () => {
       placeDisk(startCol + 3, row, 1)
 
       // Test from each position in the winning sequence
-      expect(checkWin(startCol, row, 1, board)).toBe(true)
-      expect(checkWin(startCol + 1, row, 1, board)).toBe(true)
-      expect(checkWin(startCol + 2, row, 1, board)).toBe(true)
-      expect(checkWin(startCol + 3, row, 1, board)).toBe(true)
+      expect(checkWin(startCol, row, 1, board)).toSatisfy(Array.isArray)
+      expect(checkWin(startCol + 1, row, 1, board)).toSatisfy(Array.isArray)
+      expect(checkWin(startCol + 2, row, 1, board)).toSatisfy(Array.isArray)
+      expect(checkWin(startCol + 3, row, 1, board)).toSatisfy(Array.isArray)
     })
 
     it("detects horizontal win for player 2", () => {
@@ -65,7 +65,7 @@ describe("checkWin", () => {
       placeDisk(startCol + 2, row, 2)
       placeDisk(startCol + 3, row, 2)
 
-      expect(checkWin(startCol + 2, row, 2, board)).toBe(true)
+      expect(checkWin(startCol + 2, row, 2, board)).toSatisfy(Array.isArray)
     })
 
     it("does not detect win with only 3 in a row horizontally", () => {
@@ -103,7 +103,7 @@ describe("checkWin", () => {
       placeDisk(col, startRow + 2, 1)
       placeDisk(col, startRow + 3, 1)
 
-      expect(checkWin(col, startRow + 2, 1, board)).toBe(true)
+      expect(checkWin(col, startRow + 2, 1, board)).toSatisfy(Array.isArray)
     })
 
     it("detects vertical win for player 2", () => {
@@ -115,7 +115,7 @@ describe("checkWin", () => {
       placeDisk(col, startRow + 2, 2)
       placeDisk(col, startRow + 3, 2)
 
-      expect(checkWin(col, startRow, 2, board)).toBe(true)
+      expect(checkWin(col, startRow, 2, board)).toSatisfy(Array.isArray)
     })
 
     it("does not detect win with only 3 in a row vertically", () => {
@@ -141,7 +141,7 @@ describe("checkWin", () => {
       placeDisk(startCol + 2, startRow + 2, 1)
       placeDisk(startCol + 3, startRow + 3, 1)
 
-      expect(checkWin(startCol + 1, startRow + 1, 1, board)).toBe(true)
+      expect(checkWin(startCol + 1, startRow + 1, 1, board)).toSatisfy(Array.isArray)
     })
 
     it("detects diagonal (↗) win for player 2", () => {
@@ -153,7 +153,7 @@ describe("checkWin", () => {
       placeDisk(startCol + 2, startRow + 2, 2)
       placeDisk(startCol + 3, startRow + 3, 2)
 
-      expect(checkWin(startCol + 3, startRow + 3, 2, board)).toBe(true)
+      expect(checkWin(startCol + 3, startRow + 3, 2, board)).toSatisfy(Array.isArray)
     })
 
     it("does not detect win with only 3 in diagonal (↗)", () => {
@@ -179,7 +179,7 @@ describe("checkWin", () => {
       placeDisk(startCol + 2, startRow - 2, 1)
       placeDisk(startCol + 3, startRow - 3, 1)
 
-      expect(checkWin(startCol + 2, startRow - 2, 1, board)).toBe(true)
+      expect(checkWin(startCol + 2, startRow - 2, 1, board)).toSatisfy(Array.isArray)
     })
 
     it("detects diagonal (↘) win for player 2", () => {
@@ -191,7 +191,7 @@ describe("checkWin", () => {
       placeDisk(startCol + 2, startRow - 2, 2)
       placeDisk(startCol + 3, startRow - 3, 2)
 
-      expect(checkWin(startCol, startRow, 2, board)).toBe(true)
+      expect(checkWin(startCol, startRow, 2, board)).toSatisfy(Array.isArray)
     })
 
     it("does not detect win with only 3 in diagonal (↘)", () => {
@@ -227,7 +227,7 @@ describe("checkWin", () => {
       placeDisk(1, 0, 1)
       placeDisk(2, 0, 1)
       placeDisk(3, 0, 1)
-      expect(checkWin(0, 0, 1, board)).toBe(true)
+      expect(checkWin(0, 0, 1, board)).toSatisfy(Array.isArray)
     })
 
     it("detects win at top-right corner horizontal", () => {
@@ -235,7 +235,7 @@ describe("checkWin", () => {
       placeDisk(4, 5, 2)
       placeDisk(5, 5, 2)
       placeDisk(6, 5, 2)
-      expect(checkWin(6, 5, 2, board)).toBe(true)
+      expect(checkWin(6, 5, 2, board)).toSatisfy(Array.isArray)
     })
 
     it("detects win when more than 4 in a row exists", () => {
@@ -247,8 +247,8 @@ describe("checkWin", () => {
       placeDisk(3, row, 1)
       placeDisk(4, row, 1) // 5 in a row
 
-      expect(checkWin(2, row, 1, board)).toBe(true)
-      expect(checkWin(4, row, 1, board)).toBe(true)
+      expect(checkWin(2, row, 1, board)).toSatisfy(Array.isArray)
+      expect(checkWin(4, row, 1, board)).toSatisfy(Array.isArray)
     })
 
     it("handles DRAW with full board", () => {
@@ -283,7 +283,7 @@ describe("checkWin", () => {
       placeDisk(3, 1, 1)
       placeDisk(3, 3, 1) // Vertical win through (3,2)
 
-      expect(checkWin(3, 2, 1, board)).toBe(true)
+      expect(checkWin(3, 2, 1, board)).toSatisfy(Array.isArray)
     })
   })
 })

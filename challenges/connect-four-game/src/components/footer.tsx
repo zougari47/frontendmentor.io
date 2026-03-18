@@ -4,26 +4,29 @@ import { useGame } from "@/GameContext"
 import { cn } from "@/lib/utils"
 
 function TurnCard() {
-  const { currentPlayer, isPaused } = useGame()
+  const { currentPlayer, isPaused, gameResult, handleTimeout, gameNumber } =
+    useGame()
   const [timeLeft, setTimeLeft] = useState(30)
 
+  // Reset timer when player changes, game restarts, or new round starts
   useEffect(() => {
-    if (isPaused) return // stop timer when paused
+    setTimeLeft(30)
+  }, [currentPlayer, gameNumber])
+
+  useEffect(() => {
+    if (isPaused || gameResult) return // stop timer when paused or game over
+
+    if (timeLeft <= 0) {
+      handleTimeout()
+      return
+    }
 
     const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer)
-          const winner = currentPlayer === 1 ? 2 : 1
-          console.log(`Winner is Player ${winner}`)
-          return 0
-        }
-        return prev - 1
-      })
+      setTimeLeft((prev) => prev - 1)
     }, 1000)
 
-    return () => clearInterval(timer) // cleanup on unmount or change
-  }, [currentPlayer, isPaused])
+    return () => clearInterval(timer)
+  }, [timeLeft, isPaused, gameResult, handleTimeout])
 
   return (
     <div
@@ -99,10 +102,62 @@ function TurnCard() {
   )
 }
 
-export function Footer() {
+function WinCard() {
+  const { gameResult, playAgain } = useGame()
+  if (!gameResult) return null
+
+  const isDraw = gameResult.type === "draw"
+
   return (
-    <footer className="bg-dark-purple min-h-57.75 md:min-h-48.5 w-screen flex-1 rounded-t-[60px] xl:min-h-40">
-      <TurnCard />
+    <div className="relative mx-auto w-fit -translate-y-5 p-0 text-center md:-translate-y-8 xl:-translate-y-14">
+      <div className="bg-white border-3 rounded-[20px] border-black shadow-[0_10px_0_0_var(--color-black)] px-5 py-4 text-center min-w-[197px]">
+        {isDraw ? (
+          <>
+            <span className="text-heading-xs block uppercase text-black">
+              It&apos;s a
+            </span>
+            <span className="text-heading-l block text-black">DRAW</span>
+          </>
+        ) : (
+          <>
+            <span className="text-heading-xs block uppercase text-black">
+              Player {gameResult.winner}
+            </span>
+            <span className="text-heading-l block text-black">WINS</span>
+          </>
+        )}
+        <button
+          onClick={playAgain}
+          className={cn(
+            "bg-dark-purple text-heading-xs mt-2 cursor-pointer rounded-full px-5 py-2 uppercase text-white",
+            "transition-colors duration-200 hover:bg-red"
+          )}
+        >
+          play again
+        </button>
+      </div>
+    </div>
+  )
+}
+
+export function Footer() {
+  const { gameResult } = useGame()
+
+  // Determine footer background color
+  let footerBg = "bg-dark-purple" // default
+  if (gameResult && gameResult.winner) {
+    footerBg =
+      gameResult.winner === 1 ? "bg-red" : "bg-yellow"
+  }
+
+  return (
+    <footer
+      className={cn(
+        "min-h-57.75 md:min-h-48.5 w-screen flex-1 rounded-t-[60px] xl:min-h-40 transition-colors duration-500",
+        footerBg
+      )}
+    >
+      {gameResult ? <WinCard /> : <TurnCard />}
     </footer>
   )
 }

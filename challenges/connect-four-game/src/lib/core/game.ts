@@ -55,68 +55,54 @@ export const addDiskToBoard = (
  * Checks all four directions: horizontal, vertical, and both diagonals
  * @param x - Column index where disk was placed
  * @param y - Row index where disk was placed
- * @param palyer - Player to check for win (1 or 2)
+ * @param player - Player to check for win (1 or 2)
  * @param board - The game board
- * @returns true if player has connected 4, false otherwise
+ * @returns Array of winning [col, row] cells if player connected 4, "DRAW" if board full, false otherwise
  */
 export const checkWin = (
   x: number,
   y: number,
   player: Player,
   board: Board
-) => {
-  let [currX, currY] = [x, y]
-  let count = 1
-  let isWinner = false
+): [number, number][] | "DRAW" | false => {
+  const directions: [number, number][] = [
+    [1, 0], // horizontal
+    [0, 1], // vertical
+    [1, 1], // diagonal /
+    [1, -1], // diagonal \
+  ]
 
-  function getNextCell(dx: number, dy: number) {
-    const result = [currX + dx, currY + dy]
-    return result //[nextX, nextY]
+  for (const [dx, dy] of directions) {
+    const cells: [number, number][] = [[x, y]]
+
+    // Scan positive direction
+    let cx = x + dx
+    let cy = y + dy
+    while (
+      cx >= 0 && cx <= 6 &&
+      cy >= 0 && cy <= 5 &&
+      board[cx][cy] === player
+    ) {
+      cells.push([cx, cy])
+      cx += dx
+      cy += dy
+    }
+
+    // Scan negative direction
+    cx = x - dx
+    cy = y - dy
+    while (
+      cx >= 0 && cx <= 6 &&
+      cy >= 0 && cy <= 5 &&
+      board[cx][cy] === player
+    ) {
+      cells.push([cx, cy])
+      cx -= dx
+      cy -= dy
+    }
+
+    if (cells.length >= 4) return cells
   }
 
-  function move(dx: number, dy: number) {
-    currX = x
-    currY = y
-    do {
-      const [nx, ny] = getNextCell(dx, dy)
-
-      if (nx < 0 || nx > 6 || ny < 0 || ny > 5 || isWinner) break // out of bound
-
-      const isCellValid = board[nx][ny] === player
-
-      if (isCellValid) {
-        currX = nx
-        currY = ny
-        count++
-      } else {
-        break
-      }
-
-      console.log({ count })
-      if (count === 4) {
-        isWinner = true
-      }
-    } while (true)
-  }
-
-  // horizontal
-  move(1, 0)
-  move(-1, 0)
-
-  // vertical
-  count = 1
-  move(0, 1)
-  move(0, -1)
-
-  // diagonal /
-  count = 1
-  move(-1, -1)
-  move(1, 1)
-
-  // diagonal \
-  count = 1
-  move(-1, 1)
-  move(1, -1)
-
-  return isWinner ? true : isBoardFull(board) ? "DRAW" : false
+  return isBoardFull(board) ? "DRAW" : false
 }

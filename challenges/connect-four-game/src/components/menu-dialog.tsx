@@ -6,7 +6,7 @@ import { Button, MenuButton } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 
 export function MenuDialog() {
-  const { pauseGame, resumeGame } = useGame()
+  const { pauseGame, resumeGame, restart, quitGame } = useGame()
   return (
     <Dialog.Root disablePointerDismissal>
       <Dialog.Trigger
@@ -38,8 +38,14 @@ export function MenuDialog() {
               onClick={resumeGame}
               render={<Button>continue game</Button>}
             />
-            <Button>restart</Button>
-            <Button variant="red">quit game</Button>
+            <Dialog.Close
+              onClick={restart}
+              render={<Button>restart</Button>}
+            />
+            <Dialog.Close
+              onClick={quitGame}
+              render={<Button variant="red">quit game</Button>}
+            />
           </Card>
         </Dialog.Popup>
       </Dialog.Portal>
