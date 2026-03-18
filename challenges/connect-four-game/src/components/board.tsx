@@ -50,7 +50,7 @@ export function Board() {
               <path
                 d="M15.0449 27.9824C17.3412 29.6957 20.4882 29.7038 22.793 28.002L33.8613 19.8291C35.5207 18.6037 36.4999 16.6634 36.5 14.6006V8C36.5 4.41015 33.5899 1.5 30 1.5H8C4.41015 1.5 1.5 4.41015 1.5 8V14.6162C1.50008 16.6675 2.4684 18.5983 4.1123 19.8252L15.0449 27.9824Z"
                 stroke="black"
-                stroke-width="3"
+                strokeWidth="3"
               />
             </g>
             <defs>
@@ -61,9 +61,9 @@ export function Board() {
                 width="38"
                 height="35.7731"
                 filterUnits="userSpaceOnUse"
-                color-interpolation-filters="sRGB"
+                colorInterpolationFilters="sRGB"
               >
-                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                <feFlood floodOpacity="0" result="BackgroundImageFix" />
                 <feColorMatrix
                   in="SourceAlpha"
                   type="matrix"

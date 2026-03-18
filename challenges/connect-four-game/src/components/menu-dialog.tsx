@@ -9,9 +9,11 @@ export function MenuDialog() {
   const {} = useGame()
   return (
     <Dialog.Root disablePointerDismissal>
-      <Dialog.Trigger data-slot="dialog-trigger">
-        <MenuButton>menu</MenuButton>
-      </Dialog.Trigger>
+      <Dialog.Trigger
+        onClick={() => console.log("yeah")}
+        data-slot="dialog-trigger"
+        render={<MenuButton text="menu" />}
+      />
 
       <Dialog.Portal data-slot="dialog-portal">
         <Dialog.Backdrop
@@ -32,7 +34,13 @@ export function MenuDialog() {
             <h2 className="text-heading-l text-center text-white md:pb-3.5">
               PAUSE
             </h2>
-            <Button>continue game</Button>
+            {/*<Dialog.Close
+              render={
+                <Button onClick={() => console.log("hello it's mee")}>
+                  continue game
+                </Button>
+              }
+            ></Dialog.Close>*/}
             <Button>restart</Button>
             <Button variant="red">quit game</Button>
           </Card>

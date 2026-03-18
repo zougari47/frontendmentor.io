@@ -8,11 +8,11 @@ import { Logo } from "./ui/icons"
 export function GameLayout() {
   return (
     <div className="bg-purple flex min-h-screen flex-col">
-      <div className="max-w-158 mx-auto w-10/12">
+      <div className="md:w-158 w-83.75 mx-auto">
         <header className="py-12.5 flex items-center justify-between">
           <MenuDialog />
           <Logo className="size-10" />
-          <MenuButton>Restart</MenuButton>
+          <MenuButton text="Restart" />
         </header>
 
         <main className="relative">

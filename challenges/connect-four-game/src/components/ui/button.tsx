@@ -65,8 +65,9 @@ export function ButtonWithIcon({
 export function MenuButton({
   children,
   className,
+  text,
   ...props
-}: ButtonHTMLAttributes<HTMLButtonElement>) {
+}: ButtonHTMLAttributes<HTMLButtonElement> & { text: string }) {
   return (
     <button
       {...props}
@@ -77,7 +78,7 @@ export function MenuButton({
         className
       )}
     >
-      {children}
+      {text}
     </button>
   )
 }
@@ -110,7 +111,7 @@ export function CheckButton({
         <path
           d="M1.06055 10.6426L11.3246 20.9066L31.1705 1.06067"
           stroke="white"
-          stroke-width="3"
+          strokeWidth="3"
         />
       </svg>
     </button>

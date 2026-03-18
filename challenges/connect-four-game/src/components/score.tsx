@@ -13,7 +13,8 @@ function ScoreCard({ player }: { player: 1 | 2 }) {
       className={cn(
         "px-8.75 relative rounded-[20px] bg-white py-2.5 text-center",
         "md:flex md:items-center md:justify-between md:gap-5 md:text-left",
-        "xl:pt-11.5 xl:px-6.75 xl:flex-col xl:gap-0"
+        "xl:pt-11.5 xl:px-6.75 xl:flex-col xl:gap-0",
+        !isPlayerOne && "md:flex-row-reverse"
       )}
     >
       <h3 className="text-heading-xs xl:whitespace-nowrap">PLAYER {player}</h3>
