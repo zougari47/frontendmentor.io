@@ -4,10 +4,12 @@ import { useGame } from "@/GameContext"
 import { cn } from "@/lib/utils"
 
 function TurnCard() {
-  const { currentPlayer } = useGame()
+  const { currentPlayer, isPaused } = useGame()
   const [timeLeft, setTimeLeft] = useState(30)
 
   useEffect(() => {
+    if (isPaused) return // stop timer when paused
+
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
@@ -20,8 +22,8 @@ function TurnCard() {
       })
     }, 1000)
 
-    return () => clearInterval(timer)
-  }, [currentPlayer])
+    return () => clearInterval(timer) // cleanup on unmount or change
+  }, [currentPlayer, isPaused])
 
   return (
     <div

@@ -6,11 +6,11 @@ import { Button, MenuButton } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 
 export function MenuDialog() {
-  const {} = useGame()
+  const { pauseGame, resumeGame } = useGame()
   return (
     <Dialog.Root disablePointerDismissal>
       <Dialog.Trigger
-        onClick={() => console.log("yeah")}
+        onClick={pauseGame}
         data-slot="dialog-trigger"
         render={<MenuButton text="menu" />}
       />
@@ -34,13 +34,10 @@ export function MenuDialog() {
             <h2 className="text-heading-l text-center text-white md:pb-3.5">
               PAUSE
             </h2>
-            {/*<Dialog.Close
-              render={
-                <Button onClick={() => console.log("hello it's mee")}>
-                  continue game
-                </Button>
-              }
-            ></Dialog.Close>*/}
+            <Dialog.Close
+              onClick={resumeGame}
+              render={<Button>continue game</Button>}
+            />
             <Button>restart</Button>
             <Button variant="red">quit game</Button>
           </Card>

@@ -15,6 +15,9 @@ interface GameState {
     playerOne: number
     playerTwo: number
   }
+  isPaused: boolean
+  pauseGame: () => void
+  resumeGame: () => void
 }
 
 const GameContext = createContext<GameState | undefined>(undefined)
@@ -27,6 +30,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
   })
   const [board, setBoard] = useState(() => createBoard())
   const [currentPlayer, setCurrentPlayer] = useState<Player>(1)
+  const [isPaused, setIsPaused] = useState(false)
 
   function addDisk(col: number, player: Player) {
     const tempBoard = board.map((col) => [...col])
@@ -41,6 +45,14 @@ export function GameProvider({ children }: { children: ReactNode }) {
     setBoard(createBoard())
   }
 
+  function pauseGame() {
+    setIsPaused(true)
+  }
+
+  function resumeGame() {
+    setIsPaused(false)
+  }
+
   return (
     <GameContext.Provider
       value={{
@@ -52,6 +64,9 @@ export function GameProvider({ children }: { children: ReactNode }) {
         score,
         addDisk,
         currentPlayer,
+        isPaused,
+        pauseGame,
+        resumeGame,
       }}
     >
       {children}
