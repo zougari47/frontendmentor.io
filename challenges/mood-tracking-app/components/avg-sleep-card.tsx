@@ -63,7 +63,7 @@ export function AvgSleepCard({ lastAvg, prevAvg }: SleepCardProps) {
               lastAvg ? "text-neutral-0" : "text-neutral-900"
             )}
           >
-            {title} Hours
+            {title}{lastAvg !== null ? " Hours" : ""}
           </span>
         </h3>
         <p
