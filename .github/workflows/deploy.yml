@@ -1,0 +1,67 @@
+name: Deploy Challenges
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'challenges/**'
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      projects: ${{ steps.changes.outputs.projects }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed challenge folders
+        id: changes
+        run: |
+          changed=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} \
+            | grep '^challenges/' \
+            | cut -d'/' -f2 \
+            | sort -u \
+            | jq -R -s -c 'split("\n") | map(select(length > 0))')
+
+          echo "Changed projects: $changed"
+          echo "projects=$changed" >> $GITHUB_OUTPUT
+
+  deploy:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.projects != '[]'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: ${{ fromJson(needs.detect-changes.outputs.projects) }}
+    env:
+      VERCEL_PROJECT_ID_MOOD_TRACKING_APP: ${{ secrets.VERCEL_PROJECT_ID_MOOD_TRACKING_APP }}
+      VERCEL_PROJECT_ID_ADVICE_GENERATOR_APP: ${{ secrets.VERCEL_PROJECT_ID_ADVICE_GENERATOR_APP }}
+      VERCEL_PROJECT_ID_CONNECT_FOUR_GAME: ${{ secrets.VERCEL_PROJECT_ID_CONNECT_FOUR_GAME }}
+      VERCEL_PROJECT_ID_SPACE_TOURISM_MUTLI_PAGE_WEBSITELS: ${{ secrets.VERCEL_PROJECT_ID_SPACE_TOURISM_MUTLI_PAGE_WEBSITELS }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve Vercel Project ID
+        id: resolve
+        run: |
+          SECRET_SUFFIX=$(echo "${{ matrix.project }}" | tr '-' '_' | tr '[:lower:]' '[:upper:]')
+          SECRET_NAME="VERCEL_PROJECT_ID_${SECRET_SUFFIX}"
+          PROJECT_ID="${!SECRET_NAME}"
+
+          if [ -z "$PROJECT_ID" ]; then
+            echo "::error::No Vercel project ID found for '${{ matrix.project }}'. Add secret '${SECRET_NAME}' to your repo."
+            exit 1
+          fi
+
+          echo "project_id=$PROJECT_ID" >> $GITHUB_OUTPUT
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ steps.resolve.outputs.project_id }}
+          working-directory: ./challenges/${{ matrix.project }}
+          vercel-args: '--prod'
