@@ -1,0 +1,48 @@
+name: Manual Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      project:
+        description: 'Select project to deploy'
+        required: true
+        type: choice
+        options:
+          - mood-tracking-app
+          - advice-generator-app
+          - connect-four-game
+          - space-tourism-multi-page-website
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_PROJECT_ID_MOOD_TRACKING_APP: ${{ secrets.VERCEL_PROJECT_ID_MOOD_TRACKING_APP }}
+      VERCEL_PROJECT_ID_ADVICE_GENERATOR_APP: ${{ secrets.VERCEL_PROJECT_ID_ADVICE_GENERATOR_APP }}
+      VERCEL_PROJECT_ID_CONNECT_FOUR_GAME: ${{ secrets.VERCEL_PROJECT_ID_CONNECT_FOUR_GAME }}
+      VERCEL_PROJECT_ID_SPACE_TOURISM_MULTI_PAGE_WEBSITE: ${{ secrets.VERCEL_PROJECT_ID_SPACE_TOURISM_MULTI_PAGE_WEBSITE }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve Vercel Project ID
+        id: resolve
+        run: |
+          SECRET_SUFFIX=$(echo "${{ github.event.inputs.project }}" | tr '-' '_' | tr '[:lower:]' '[:upper:]')
+          SECRET_NAME="VERCEL_PROJECT_ID_${SECRET_SUFFIX}"
+          PROJECT_ID="${!SECRET_NAME}"
+
+          if [ -z "$PROJECT_ID" ]; then
+            echo "::error::No Vercel project ID found for '${{ github.event.inputs.project }}'. Add secret '${SECRET_NAME}' to your repo."
+            exit 1
+          fi
+
+          echo "project_id=$PROJECT_ID" >> $GITHUB_OUTPUT
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ steps.resolve.outputs.project_id }}
+          working-directory: ./challenges/${{ github.event.inputs.project }}
+          vercel-args: '--prod'
