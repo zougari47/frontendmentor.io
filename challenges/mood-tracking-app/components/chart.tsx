@@ -1,21 +1,117 @@
 "use client"
 
 import type { Tables } from "@/supabase/types"
+import { useState } from "react"
 
 import {
   MoodBgColors,
+  MoodIconsColor,
   MoodIconsMono,
   MS_PER_DAY,
+  moodLabels,
   sleepHours,
   sleepPxValues,
   sleepRanges,
 } from "@/lib/constants"
 import { cn, getDayStartUTC } from "@/lib/utils"
+import { Popover, PopoverContent, PopoverTrigger, PopoverArrow } from "@/components/ui/popover"
 
 import { SleepIcon } from "./icons/sleep"
 
 interface ChartProps {
   moods: Tables<"moods">[]
+}
+
+function ChartPillar({ day }: { day: any }) {
+  const [open, setOpen] = useState(false)
+  
+  const Icon =
+    day.mood?.mood_level != null ? MoodIconsMono[day.mood.mood_level] : null
+
+  const sleepIdx =
+    day.mood?.sleep_hours != null
+      ? sleepHours.findIndex((sh) => sh === day.mood?.sleep_hours)
+      : -1
+
+  const sleepRange =
+    sleepIdx !== -1 ? sleepRanges[sleepIdx].replace("+9", "9+") : ""
+
+  const ColoredIcon =
+    day.mood?.mood_level != null ? MoodIconsColor[day.mood.mood_level] : null
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <div
+          onMouseEnter={() => setOpen(true)}
+          onMouseLeave={() => setOpen(false)}
+          className={cn(
+            "mt-auto w-full min-w-fit rounded-full pt-[5px]",
+            "animate-grow origin-bottom [&_svg]:mx-auto [&_svg]:size-[30px] cursor-pointer",
+            !day.mood && "h-[200px]",
+            day.mood?.mood_level != null && MoodBgColors[day.mood?.mood_level],
+            sleepIdx !== -1 && sleepPxValues[sleepIdx]
+          )}
+        >
+          {Icon && <Icon />}
+        </div>
+      </PopoverTrigger>
+      {day.mood && (
+        <PopoverContent
+          onMouseEnter={() => setOpen(true)}
+          onMouseLeave={() => setOpen(false)}
+          className="z-50 w-[240px] rounded-16 bg-neutral-0 p-250 text-neutral-900 shadow-[0px_4px_7px_0px_rgba(33,33,77,0.16)] border border-blue-100 ring-0"
+          side="left"
+          sideOffset={12}
+          align="start"
+        >
+          <PopoverArrow className="fill-neutral-0" width={16} height={8} />
+          <div className="flex flex-col gap-200">
+            {/* Mood */}
+            <div className="flex flex-col gap-075">
+              <span className="txt-preset-8 font-semibold text-neutral-600">Mood</span>
+              <div className="flex items-center gap-100">
+                {ColoredIcon && (
+                  <span className="inline-flex size-[24px] shrink-0 [&_svg]:w-full [&_svg]:h-full">
+                    <ColoredIcon />
+                  </span>
+                )}
+                <span className="txt-preset-6 text-neutral-900">
+                  {moodLabels[day.mood.mood_level]}
+                </span>
+              </div>
+            </div>
+
+            {/* Sleep */}
+            <div className="flex flex-col gap-075">
+              <span className="txt-preset-8 font-semibold text-neutral-600">Sleep</span>
+              <span className="txt-preset-6 font-normal text-neutral-900">{sleepRange} hours</span>
+            </div>
+
+            {/* Reflection */}
+            {day.mood.journal && (
+              <div className="flex flex-col gap-075">
+                <span className="txt-preset-8 font-semibold text-neutral-600">Reflection</span>
+                <span className="txt-preset-7 font-normal text-neutral-900 leading-snug">
+                  {day.mood.journal}
+                </span>
+              </div>
+            )}
+
+            {/* Tags */}
+            {day.mood.feelings && day.mood.feelings.length > 0 && (
+              <div className="flex flex-col gap-075">
+                <span className="txt-preset-8 font-semibold text-neutral-600">Tags</span>
+                <span className="txt-preset-7 font-normal text-neutral-900 leading-snug">
+                  {day.mood.feelings.join(", ")}
+                </span>
+              </div>
+            )}
+          </div>
+        </PopoverContent>
+      )}
+    </Popover>
+  )
 }
 
 export function Chart({ moods }: ChartProps) {
@@ -89,27 +185,7 @@ export function Chart({ moods }: ChartProps) {
                   )}
                 >
                   {/* pillars  */}
-                  <div
-                    className={cn(
-                      "mt-auto h-[200px] w-full min-w-fit rounded-full pt-[5px]",
-                      "animate-grow origin-bottom [&_svg]:mx-auto [&_svg]:size-[30px]",
-                      day.mood?.mood_level != null &&
-                        MoodBgColors[day.mood?.mood_level],
-                      day.mood?.sleep_hours != null &&
-                        sleepPxValues[
-                          sleepHours.findIndex(
-                            (sh) => sh === day.mood?.sleep_hours
-                          )
-                        ]
-                    )}
-                  >
-                    {/* icon inside the pillar */}
-                    {day.mood?.mood_level != null &&
-                      (() => {
-                        const Icon = MoodIconsMono[day.mood.mood_level]
-                        return <Icon />
-                      })()}
-                  </div>
+                  <ChartPillar day={day} />
                   {/* month/day */}
                   <div className="space-y-075 text-center">
                     <span className="txt-preset-9 block text-neutral-600">
