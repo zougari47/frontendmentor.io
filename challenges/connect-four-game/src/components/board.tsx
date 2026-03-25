@@ -14,10 +14,11 @@ function getCY(row: number) {
 }
 
 export function Board() {
-  const { board, addDisk, currentPlayer, gameResult, isPaused, winningCells } = useGame()
+  const { board, addDisk, currentPlayer, gameResult, isPaused, winningCells, gameMode } = useGame()
   const [hoveredCol, setHoveredCol] = useState<number | null>(null)
 
-  const isInteractive = !gameResult && !isPaused
+  const isCpuTurn = gameMode === "vsCPU" && currentPlayer === 2
+  const isInteractive = !gameResult && !isPaused && !isCpuTurn
 
   const isWinningCell = (col: number, row: number) =>
     winningCells?.some(([c, r]) => c === col && r === row) ?? false
@@ -30,7 +31,7 @@ export function Board() {
   return (
     <div className="relative w-full">
       {/* Arrow indicator above the board */}
-      {hoveredCol !== null && (
+      {hoveredCol !== null && isInteractive && (
         <div
           className="pointer-events-none absolute -top-10"
           style={{

@@ -6,18 +6,21 @@ import { Card } from "./ui/card"
 import { PlayerOneScoreEmoji, PlayerTwoScoreEmoji } from "./ui/icons"
 
 function ScoreCard({ player }: { player: 1 | 2 }) {
-  const { score } = useGame()
+  const { score, gameMode } = useGame()
   const isPlayerOne = player === 1
   return (
     <Card
       className={cn(
+        "w-[145px] md:w-[272px] xl:w-[141px]",
         "px-8.75 relative rounded-[20px] bg-white py-2.5 text-center",
         "md:flex md:items-center md:justify-between md:gap-5 md:text-left",
         "xl:pt-11.5 xl:px-6.75 xl:flex-col xl:gap-0",
         !isPlayerOne && "md:flex-row-reverse"
       )}
     >
-      <h3 className="text-heading-xs xl:whitespace-nowrap">PLAYER {player}</h3>
+      <h3 className="text-heading-xs xl:whitespace-nowrap">
+        {player === 2 && gameMode === "vsCPU" ? "CPU" : `PLAYER ${player}`}
+      </h3>
       <span className="text-bold block text-[32px] leading-normal">
         {isPlayerOne ? score.playerOne : score.playerTwo}
       </span>

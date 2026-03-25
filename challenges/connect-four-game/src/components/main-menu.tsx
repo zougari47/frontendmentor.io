@@ -4,11 +4,11 @@ import { useGame } from "@/GameContext"
 import { cn } from "@/lib/utils"
 import { Button, ButtonWithIcon, CheckButton } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Logo, PlayVsPlayer } from "@/components/ui/icons"
+import { Logo, PlayVsPlayer, PlayVsCPU } from "@/components/ui/icons"
 
 export function MainMenu() {
   const [showRules, setShowRules] = useState(false)
-  const { setIsPlaying } = useGame()
+  const { setIsPlaying, setGameMode } = useGame()
 
   return (
     <main
@@ -30,9 +30,22 @@ export function MainMenu() {
           <Logo className="mb-19.75 mx-auto block" />
           <nav className="gap-7.5 mx-auto grid justify-items-center">
             <ButtonWithIcon
+              variant="red"
+              icon={<PlayVsCPU />}
+              onClick={() => {
+                setGameMode("vsCPU")
+                setIsPlaying(true)
+              }}
+            >
+              play vs cpu
+            </ButtonWithIcon>
+            <ButtonWithIcon
               variant="yellow"
               icon={<PlayVsPlayer />}
-              onClick={() => setIsPlaying(true)}
+              onClick={() => {
+                setGameMode("vsPlayer")
+                setIsPlaying(true)
+              }}
             >
               play vs player
             </ButtonWithIcon>

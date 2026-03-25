@@ -2,11 +2,13 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useState,
   type ReactNode,
 } from "react"
 
 import { addDiskToBoard, checkWin, createBoard } from "@/lib/core/game"
+import { getBestMove } from "@/lib/core/cpu"
 import type { Board, Player } from "@/lib/core/types"
 
 type GameResult = {
@@ -17,9 +19,13 @@ type GameResult = {
   type: "draw"
 } | null
 
+export type GameMode = "vsPlayer" | "vsCPU"
+
 interface GameState {
   isPlaying: boolean
   setIsPlaying: (isPlaying: boolean) => void
+  gameMode: GameMode
+  setGameMode: (gameMode: GameMode) => void
   board: Board
   addDisk: (col: number) => void
   currentPlayer: Player
@@ -49,6 +55,7 @@ const GameContext = createContext<GameState | undefined>(undefined)
 
 export function GameProvider({ children }: { children: ReactNode }) {
   const [isPlaying, setIsPlaying] = useState(false)
+  const [gameMode, setGameMode] = useState<GameMode>("vsPlayer")
   const [score, setScore] = useState({ playerOne: 0, playerTwo: 0 })
   const [board, setBoard] = useState(() => createBoard())
   const [currentPlayer, setCurrentPlayer] = useState<Player>(1)
@@ -64,34 +71,49 @@ export function GameProvider({ children }: { children: ReactNode }) {
     }))
   }, [])
 
-  function addDisk(col: number) {
-    if (gameResult) return // game is over, ignore clicks
+  const addDisk = useCallback((col: number) => {
+    if (gameResult || isPaused) return
 
-    const tempBoard = board.map((c) => [...c])
-    const placed = addDiskToBoard(col, currentPlayer, tempBoard)
-    if (!placed) return // column full
+    setBoard((prevBoard) => {
+      const tempBoard = prevBoard.map((c) => [...c])
+      const placed = addDiskToBoard(col, currentPlayer, tempBoard)
+      if (!placed) return prevBoard // column full
 
-    // Find the row where the disk landed
-    const row = tempBoard[col].lastIndexOf(currentPlayer)
+      // Find the row where the disk landed
+      const row = tempBoard[col].lastIndexOf(currentPlayer)
 
-    setBoard(tempBoard)
+      // Check for win/draw
+      const result = checkWin(col, row, currentPlayer, tempBoard)
+      if (Array.isArray(result)) {
+        setGameResult({ winner: currentPlayer, type: "connect" })
+        setWinningCells(result)
+        incrementScore(currentPlayer)
+      } else if (result === "DRAW") {
+        setGameResult({ winner: null, type: "draw" })
+      } else {
+        // Switch player
+        setCurrentPlayer(currentPlayer === 1 ? 2 : 1)
+      }
+      return tempBoard
+    })
+  }, [currentPlayer, gameResult, isPaused, incrementScore])
 
-    // Check for win/draw
-    const result = checkWin(col, row, currentPlayer, tempBoard)
-    if (Array.isArray(result)) {
-      setGameResult({ winner: currentPlayer, type: "connect" })
-      setWinningCells(result)
-      incrementScore(currentPlayer)
-      return
+  // CPU move logic
+  useEffect(() => {
+    if (
+      isPlaying &&
+      gameMode === "vsCPU" &&
+      currentPlayer === 2 &&
+      !gameResult &&
+      !isPaused
+    ) {
+      const timer = setTimeout(() => {
+        const bestCol = getBestMove(board, 2)
+        addDisk(bestCol)
+      }, 2000)
+      return () => clearTimeout(timer)
     }
-    if (result === "DRAW") {
-      setGameResult({ winner: null, type: "draw" })
-      return
-    }
-
-    // Switch player
-    setCurrentPlayer((prev) => (prev === 1 ? 2 : 1))
-  }
+  }, [board, currentPlayer, gameMode, gameResult, isPaused, isPlaying, addDisk])
 
   function handleTimeout() {
     if (gameResult) return // already resolved
@@ -144,6 +166,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
       value={{
         isPlaying,
         setIsPlaying,
+        gameMode,
+        setGameMode,
         board,
         restart,
         quitGame,
